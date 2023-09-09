@@ -13,7 +13,7 @@ public class MusicBar : MonoBehaviour
     float minScale = 0.1f;
     float maxScale = .8f;
     float combinedMaxScale = 1.4f;
-    float detectionDistance = 1f;
+    float detectionDistance = 2f;
     // Start is called before the first frame update
     void Start()
     {
