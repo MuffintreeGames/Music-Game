@@ -5,6 +5,7 @@ using UnityEngine;
 public class NoteSpawner : MonoBehaviour
 {
     public GameObject Target;
+    public GameObject BlastNote;
 
     static float timeBetweenNotes = 0.25f;
     static float leftBound = -8f;
@@ -24,8 +25,15 @@ public class NoteSpawner : MonoBehaviour
         timeLeft -= Time.deltaTime;
         if (timeLeft < 0)
         {
+            int noteType = Random.Range(0, 2);
             float spawnX = Random.Range(leftBound, rightBound);
-            GameObject.Instantiate(Target, new Vector2(spawnX, spawnY), Quaternion.identity);
+            if (noteType == 0)
+            {
+                Instantiate(Target, new Vector2(spawnX, spawnY), Quaternion.identity);
+            } else
+            {
+                Instantiate(BlastNote, new Vector2(spawnX, spawnY), Quaternion.identity);
+            }
             timeLeft = timeBetweenNotes;
         }
     }

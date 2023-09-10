@@ -15,7 +15,7 @@ public class Target : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector2(transform.position.x, transform.position.y - (fallSpeed * Time.deltaTime)); 
+        //transform.position = new Vector2(transform.position.x, transform.position.y - (fallSpeed * Time.deltaTime)); 
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
