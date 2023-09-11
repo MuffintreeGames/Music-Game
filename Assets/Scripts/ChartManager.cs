@@ -1,14 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
-struct Note
+[Serializable]
+public class Note
 {
     public GameObject noteObject;
     public float time;
     public bool blast;
     public int column;
+}
+
+[Serializable]
+public class NoteList
+{
+    public List<Note> list = new List<Note>();
 }
 
 public class ChartManager : MonoBehaviour
@@ -19,27 +28,32 @@ public class ChartManager : MonoBehaviour
     public AudioSource songSource;
     public Slider timeline;
 
-    List<Note> chart;
+    public static string selectedMode = "None";
+
+    NoteList chart;
     float currentTime = 0f;
     float songLength = 0f;
     List<GameObject> visibleNotes;
     int firstVisibleIndex = 0;  //earliest note in song that is currently on screen
     int numNotesVisible = 0;
-    string selectedMode = "None";
+    
     bool shortPause = false;
+    bool longPause = false;
 
-    static float screenTimeRange = 3.5f;
+    static float screenTimeRange = 7f;
     static float placementPosition = 0.5f;  //where in current range represents current time (percentage based; 0.5 means halfway through range)
 
     static float maxHeight = 3.5f;
     static float minHeight = -3.5f;
 
-    static float columnWidth = 1.0438f; //change both of these if column width/positioning is changed
-    static float leftmostColumnPlacement = -4.67f;
+    public static float columnWidth = 1.0438f; //change both of these if column width/positioning is changed
+    public static float leftmostColumnPlacement = -4.67f;
+
+    static float skipDuration = 5f;
     // Start is called before the first frame update
     void Start()
     {
-        chart = new List<Note>();
+        chart = new NoteList();
         visibleNotes = new List<GameObject>();
         songLength = songSource.clip.length;
     }
@@ -53,22 +67,28 @@ public class ChartManager : MonoBehaviour
             return;
         } else if (!songSource.isPlaying)
         {
+            songSource.time = currentTime;
             songSource.Play();
         }
 
         currentTime += Time.deltaTime;
+        PerformNoteUpkeep();
+        UpdateTimeline();
+        //Debug.Log("current first index: " + firstVisibleIndex + "; current num of notes: " + numNotesVisible);
+    }
+
+    void PerformNoteUpkeep()    //use whenever doing anything that changes the note positions
+    {
         RemoveNotesFromBottom();
         RemoveNotesFromTop();
         AddNotesToTop();
         AddNotesToBottom();
         UpdateNotePositions();
-        UpdateTimeline();
-        //Debug.Log("current first index: " + firstVisibleIndex + "; current num of notes: " + numNotesVisible);
     }
 
     bool IsPaused()
     {
-        return shortPause;
+        return shortPause || longPause;
     }
 
     public void BriefPlaybackPause()
@@ -81,6 +101,16 @@ public class ChartManager : MonoBehaviour
         shortPause = false;
     }
 
+    public void FullPause()
+    {
+        longPause = true;
+    }
+
+    public void EndFullPause()
+    {
+        longPause = false;
+    }
+
     void UpdateTimeline()
     {
         timeline.SetValueWithoutNotify(currentTime / songLength);
@@ -89,10 +119,10 @@ public class ChartManager : MonoBehaviour
     void AddNotesToTop()
     {
         //Debug.Log("first index: " + firstVisibleIndex + "; num of notes: " + numNotesVisible);
-        for (int i = firstVisibleIndex + numNotesVisible; i < chart.Count; i++)
+        for (int i = firstVisibleIndex + numNotesVisible; i < chart.list.Count; i++)
         {
             //Debug.Log("comparing " + currentTime + " to " + chart[i].time);
-            if (chart[i].time > currentTime + placementPosition * screenTimeRange)
+            if (chart.list[i].time > currentTime + placementPosition * screenTimeRange)
             {
                 return;
             } else
@@ -100,8 +130,8 @@ public class ChartManager : MonoBehaviour
                 Debug.Log("found a new note to add to top: " + i + "!");
                 numNotesVisible++;
                 
-                chart[i].noteObject.SetActive(true);
-                visibleNotes.Add(chart[i].noteObject);
+                chart.list[i].noteObject.SetActive(true);
+                visibleNotes.Add(chart.list[i].noteObject);
             }
         }
     }
@@ -111,8 +141,8 @@ public class ChartManager : MonoBehaviour
         //Debug.Log("first index: " + firstVisibleIndex + "; num of notes: " + numNotesVisible);
         for (int i = firstVisibleIndex - 1; i >= 0; i--)
         {
-            Debug.Log("comparing " + currentTime + " to " + chart[i].time);
-            if (chart[i].time < currentTime - placementPosition * screenTimeRange)
+            Debug.Log("comparing " + currentTime + " to " + chart.list[i].time);
+            if (chart.list[i].time < currentTime - placementPosition * screenTimeRange)
             {
                 return;
             }
@@ -121,13 +151,13 @@ public class ChartManager : MonoBehaviour
                 Debug.Log("found a new note to add to bottom: " + i + "!");
                 numNotesVisible++;
                 firstVisibleIndex--;
-                if (chart[i].noteObject == null)
+                if (chart.list[i].noteObject == null)
                 {
                     Debug.LogError("error: " + i + "has a null note object!");
                     return;
                 }
-                chart[i].noteObject.SetActive(true);
-                visibleNotes.Insert(0, chart[i].noteObject);
+                chart.list[i].noteObject.SetActive(true);
+                visibleNotes.Insert(0, chart.list[i].noteObject);
             }
         }
     }
@@ -136,7 +166,7 @@ public class ChartManager : MonoBehaviour
     {
         for (int i = 0; i < numNotesVisible; i++)
         {
-            if (chart[i + firstVisibleIndex].time >= currentTime - placementPosition * screenTimeRange)
+            if (chart.list[i + firstVisibleIndex].time >= currentTime - placementPosition * screenTimeRange)
             {
                 return;
             } else
@@ -154,7 +184,7 @@ public class ChartManager : MonoBehaviour
     {
         for (int i = numNotesVisible-1; i >= 0; i--)
         {
-            if (chart[i + firstVisibleIndex].time <= currentTime + placementPosition * screenTimeRange)
+            if (chart.list[i + firstVisibleIndex].time <= currentTime + placementPosition * screenTimeRange)
             {
                 return;
             }
@@ -174,7 +204,7 @@ public class ChartManager : MonoBehaviour
         { 
             int chartIndex = visibleIndex + firstVisibleIndex;
             GameObject noteObject = visibleNotes[visibleIndex];
-            Note note = chart[chartIndex];
+            Note note = chart.list[chartIndex];
             //float xPosition = leftmostColumnPlacement + (columnWidth * column);
             float timeDifference = note.time - currentTime;
             float percentageYPosition = ((placementPosition * screenTimeRange) + timeDifference) / screenTimeRange;
@@ -186,7 +216,7 @@ public class ChartManager : MonoBehaviour
     public void PlaceNote(int column)
     {
         Debug.Log("calling place note!");
-        if (selectedMode == "None") {
+        if (selectedMode != "Note" && selectedMode != "Blast") {
             Debug.Log("wrong mode");
             return;
         }
@@ -199,7 +229,7 @@ public class ChartManager : MonoBehaviour
 
         for (int visibleIndex = 0; visibleIndex < numNotesVisible; visibleIndex++) {    //place new note before the first note that has a higher time than the current time, or at the end if no notes fit rule
             int chartIndex = visibleIndex + firstVisibleIndex;
-            if (visibleIndex == numNotesVisible - 1 || chart[chartIndex].time >= currentTime)
+            if (visibleIndex == numNotesVisible - 1 || chart.list[chartIndex].time >= currentTime)
             {
                 GameObject noteObject;
                 float noteXPosition = leftmostColumnPlacement + (columnWidth * column);
@@ -211,7 +241,7 @@ public class ChartManager : MonoBehaviour
                     noteObject = Instantiate(editorNote);
                 }
                 newNote.noteObject = noteObject;
-                chart.Insert(chartIndex, newNote);
+                chart.list.Insert(chartIndex, newNote);
                 noteObject.transform.SetParent(targetCanvas.transform);
                 noteObject.transform.localPosition = new Vector2(noteXPosition, 0);
                 visibleNotes.Insert(visibleIndex, noteObject);
@@ -224,7 +254,8 @@ public class ChartManager : MonoBehaviour
     {
         if (targetMode == selectedMode)
         {
-            selectedMode = "None";
+            return;
+            //selectedMode = "None";
         } else
         {
             selectedMode = targetMode;
@@ -235,9 +266,9 @@ public class ChartManager : MonoBehaviour
     public void PrintChart()
     {
         Debug.Log("displaying notechart!");
-        for (int i = 0; i < chart.Count; i++)
+        for (int i = 0; i < chart.list.Count; i++)
         {
-            Debug.Log("note " + i + ": time = " + chart[i].time + ", column = " + chart[i].column + ", blast = " + chart[i].blast);
+            Debug.Log("note " + i + ": time = " + chart.list[i].time + ", column = " + chart.list[i].column + ", blast = " + chart.list[i].blast);
         }
         Debug.Log("finished notechart!");
     }
@@ -245,7 +276,7 @@ public class ChartManager : MonoBehaviour
     public void UpdateSongPosition()
     {
         Debug.Log("updating song position!");
-        currentTime = Mathf.Min(timeline.value * songLength, songLength);
+        currentTime = Mathf.Clamp(timeline.value * songLength, 0f, songLength);
         //songSource.Stop();
         songSource.time = currentTime;
         /*if (currentTime < songLength)
@@ -259,14 +290,106 @@ public class ChartManager : MonoBehaviour
         UpdateNotePositions();
     }
 
+    public void SkipForward()
+    {
+        currentTime = Mathf.Min(currentTime + skipDuration, songLength);
+        songSource.time = currentTime;
+        PerformNoteUpkeep();
+        UpdateTimeline();
+    }
+
+    public void SkipBackward()
+    {
+        currentTime = Mathf.Max(currentTime - skipDuration, 0f);
+        songSource.time = currentTime;
+        PerformNoteUpkeep();
+        UpdateTimeline();
+    }
+
     public void ExportNotechart()
     {
-        string output = "";
-        for (int i = 0; i < chart.Count; i++)
-        {
-            output += JsonUtility.ToJson(chart[i]);
-            //output += "time " + chart[i].time + " column " + chart[i].column + " blast " + chart[i].blast + " ";
-        }
+        string output = JsonUtility.ToJson(chart);
         GUIUtility.systemCopyBuffer = output;
+    }
+
+    public void DeleteNote(GameObject targetNote)
+    {
+        for (int i = 0; i < visibleNotes.Count; i++)
+        {
+            if (visibleNotes[i] == targetNote)
+            {
+                visibleNotes.RemoveAt(i);
+                int chartIndex = firstVisibleIndex + i;
+                chart.list.RemoveAt(chartIndex);
+                numNotesVisible--;
+                Destroy(targetNote);
+                return;
+            }
+        }
+        Debug.LogError("failed to find note to delete!");
+    }
+
+    public void MoveNote(GameObject targetNote, int targetColumn)
+    {
+        for (int i = 0; i < visibleNotes.Count; i++)
+        {
+            if (visibleNotes[i] == targetNote)
+            {
+                int chartIndex = firstVisibleIndex + i;
+                Note noteInfo = chart.list[chartIndex];
+                if (targetColumn != -1)
+                {
+                    noteInfo.column = targetColumn;
+                }
+                float percentageYPosition = (targetNote.transform.localPosition.y - minHeight) / (maxHeight - minHeight);
+                float newTime = currentTime + (percentageYPosition * screenTimeRange - placementPosition * screenTimeRange);
+                float oldTime = noteInfo.time;
+                noteInfo.time = newTime;
+                chart.list[chartIndex] = noteInfo;
+                //Debug.Log("old time for note was " + noteInfo.time + "; calculated new time is " + newTime);
+                bool changedPosition = true;
+                if (newTime > oldTime)
+                {
+                    for (int j = i + 1; j <= visibleNotes.Count; j++)
+                    {
+                        int jChartIndex = firstVisibleIndex + j;
+                        if (j == visibleNotes.Count)
+                        {
+                            visibleNotes.Add(targetNote);
+                            visibleNotes.RemoveAt(i);
+                            chart.list.Insert(jChartIndex, noteInfo);
+                            chart.list.RemoveAt(chartIndex);
+                            break;
+                        }
+                        
+                        Debug.Log("index being checked: " + jChartIndex);
+                        if (chart.list[jChartIndex].time >= newTime)
+                        {
+                            visibleNotes.Insert(j, targetNote);
+                            visibleNotes.RemoveAt(i);
+                            chart.list.Insert(jChartIndex, noteInfo);
+                            chart.list.RemoveAt(chartIndex);
+                            break;
+                        }
+                    }
+                } else
+                {
+                    for (int j = i - 1; j >= -1; j--)
+                    {
+                        int jChartIndex = firstVisibleIndex + j;
+                        if (j == -1 || chart.list[jChartIndex].time <= newTime)
+                        {
+                            visibleNotes.RemoveAt(i);
+                            visibleNotes.Insert(j + 1, targetNote);
+                            chart.list.RemoveAt(chartIndex);
+                            chart.list.Insert(jChartIndex + 1, noteInfo);
+                            break;
+                        }
+                    }
+                }
+                return;
+            }
+        }
+        Debug.LogError("failed to find note to move!");
     }
 }
