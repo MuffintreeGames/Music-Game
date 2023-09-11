@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,7 @@ public class ChartManager : MonoBehaviour
     public GameObject targetCanvas;
     public AudioSource songSource;
     public Slider timeline;
+    public TMP_InputField importField;
 
     public static string selectedMode = "None";
 
@@ -283,11 +285,7 @@ public class ChartManager : MonoBehaviour
         {
             songSource.Play();
         }*/
-        RemoveNotesFromBottom();
-        RemoveNotesFromTop();
-        AddNotesToTop();
-        AddNotesToBottom();
-        UpdateNotePositions();
+        PerformNoteUpkeep();
     }
 
     public void SkipForward()
@@ -310,6 +308,48 @@ public class ChartManager : MonoBehaviour
     {
         string output = JsonUtility.ToJson(chart);
         GUIUtility.systemCopyBuffer = output;
+    }
+
+    public void ImportNotechart()
+    {
+        NoteList newChart = JsonUtility.FromJson<NoteList>(importField.text);
+        if (newChart == null)
+        {
+            Debug.LogError("Failed to read import data!");
+            return;
+        }
+        for (int i = 0; i < chart.list.Count; i++)
+        {
+            Destroy(chart.list[i].noteObject);
+        }
+        chart = newChart;
+        for (int i = 0; i < chart.list.Count; i++)
+        {
+            GameObject noteObject;
+            float noteXPosition = leftmostColumnPlacement + (columnWidth * chart.list[i].column);
+            if (chart.list[i].blast)
+            {
+                noteObject = Instantiate(editorBlast);
+            }
+            else
+            {
+                noteObject = Instantiate(editorNote);
+            }
+            noteObject.SetActive(false);
+            chart.list[i].noteObject = noteObject;
+            //chart.list.Insert(chartIn, newNote);
+            noteObject.transform.SetParent(targetCanvas.transform);
+            noteObject.transform.localPosition = new Vector2(noteXPosition, 0);
+            //visibleNotes.Insert(visibleIndex, noteObject);
+        }
+        visibleNotes = new List<GameObject>();
+        currentTime = 0f;
+        firstVisibleIndex = 0;
+        numNotesVisible = 0;
+        longPause = true;
+        
+        PerformNoteUpkeep();
+        UpdateTimeline();
     }
 
     public void DeleteNote(GameObject targetNote)

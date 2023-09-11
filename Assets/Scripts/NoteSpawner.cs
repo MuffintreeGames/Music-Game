@@ -21,6 +21,9 @@ public class NoteSpawner : MonoBehaviour
     static float leftmostColumnPlacement = -8f;
     static float preludeTime = 2f;
 
+    static float normalNoteDelay = 1.5f;
+    static float blastNoteDelay = 1.8f;
+
     float preludeTimeLeft = 0f;
     // Start is called before the first frame update
     void Start()
@@ -44,7 +47,8 @@ public class NoteSpawner : MonoBehaviour
         }
 
         currentTime += Time.deltaTime;
-        SpawnNewNotes();
+        SpawnNewNormalNotes();
+        SpawnNewBlastNotes();
         UpdateTimeline();
     }
 
@@ -53,25 +57,46 @@ public class NoteSpawner : MonoBehaviour
         timeline.value = currentTime / songSource.clip.length;
     }
 
-    void SpawnNewNotes()
+    void SpawnNewNormalNotes()
     {
         for (int i = chartIndex; i < chart.list.Count; i++)
         {
             Note nextNote = chart.list[i];
-            if (nextNote.time > currentTime)
+            if (!nextNote.blast)
             {
-                return;
-            } else
-            {
-                float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
-                if (nextNote.blast)
+                if (nextNote.time > currentTime + normalNoteDelay)
                 {
-                    Instantiate(BlastNote, new Vector2(xPos, spawnY), Quaternion.identity);
-                } else
-                {
-                    Instantiate(BlastNote, new Vector2(xPos, spawnY), Quaternion.identity);
+                    return;
                 }
-                chartIndex++;
+                else
+                {
+                    float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
+
+                    Instantiate(Target, new Vector2(xPos, spawnY), Quaternion.identity);
+                    chartIndex++;
+                }
+            }
+        }
+    }
+
+    void SpawnNewBlastNotes()
+    {
+        for (int i = chartIndex; i < chart.list.Count; i++)
+        {
+            Note nextNote = chart.list[i];
+            if (nextNote.blast)
+            {
+                if (nextNote.time > currentTime + blastNoteDelay)
+                {
+                    return;
+                }
+                else
+                {
+                    float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
+
+                    Instantiate(BlastNote, new Vector2(xPos, spawnY), Quaternion.identity);
+                    chartIndex++;
+                }
             }
         }
     }
