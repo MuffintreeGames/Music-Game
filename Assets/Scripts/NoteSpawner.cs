@@ -7,6 +7,8 @@ public class NoteSpawner : MonoBehaviour
 {
     public GameObject Target;
     public GameObject BlastNote;
+    public GameObject YellowNote;
+    public GameObject BlueNote;
     public string rawChart;
     public Slider timeline;
     public AudioSource songSource;
@@ -25,6 +27,8 @@ public class NoteSpawner : MonoBehaviour
     static float blastNoteDelay = 1.8f;
 
     float preludeTimeLeft = 0f;
+
+    int notesSpawned;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,8 +51,10 @@ public class NoteSpawner : MonoBehaviour
         }
 
         currentTime += Time.deltaTime;
+        notesSpawned = 0;
         SpawnNewNormalNotes();
         SpawnNewBlastNotes();
+        chartIndex += notesSpawned;
         UpdateTimeline();
     }
 
@@ -62,7 +68,7 @@ public class NoteSpawner : MonoBehaviour
         for (int i = chartIndex; i < chart.list.Count; i++)
         {
             Note nextNote = chart.list[i];
-            if (!nextNote.blast)
+            if (nextNote.type != "Blast")
             {
                 if (nextNote.time > currentTime + normalNoteDelay)
                 {
@@ -72,8 +78,13 @@ public class NoteSpawner : MonoBehaviour
                 {
                     float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
 
-                    Instantiate(Target, new Vector2(xPos, spawnY), Quaternion.identity);
-                    chartIndex++;
+                    switch (nextNote.type)
+                    {
+                        case "Yellow": Instantiate(YellowNote, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                        case "Blue": Instantiate(BlueNote, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                        case "Note": Instantiate(Target, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                    }
+                    notesSpawned++;
                 }
             }
         }
@@ -84,7 +95,7 @@ public class NoteSpawner : MonoBehaviour
         for (int i = chartIndex; i < chart.list.Count; i++)
         {
             Note nextNote = chart.list[i];
-            if (nextNote.blast)
+            if (nextNote.type == "Blast")
             {
                 if (nextNote.time > currentTime + blastNoteDelay)
                 {
@@ -95,7 +106,7 @@ public class NoteSpawner : MonoBehaviour
                     float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
 
                     Instantiate(BlastNote, new Vector2(xPos, spawnY), Quaternion.identity);
-                    chartIndex++;
+                    notesSpawned++;
                 }
             }
         }

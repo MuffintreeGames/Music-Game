@@ -11,7 +11,7 @@ public class Note
 {
     public GameObject noteObject;
     public float time;
-    public bool blast;
+    public string type;
     public int column;
 }
 
@@ -25,6 +25,8 @@ public class ChartManager : MonoBehaviour
 {
     public GameObject editorNote;
     public GameObject editorBlast;
+    public GameObject editorYellow;
+    public GameObject editorBlue;
     public GameObject targetCanvas;
     public AudioSource songSource;
     public Slider timeline;
@@ -218,14 +220,14 @@ public class ChartManager : MonoBehaviour
     public void PlaceNote(int column)
     {
         Debug.Log("calling place note!");
-        if (selectedMode != "Note" && selectedMode != "Blast") {
+        if (selectedMode != "Note" && selectedMode != "Blast" && selectedMode != "Yellow" && selectedMode != "Blue") {
             Debug.Log("wrong mode");
             return;
         }
 
         Note newNote = new Note();
         newNote.time = currentTime;
-        newNote.blast = selectedMode == "Blast";
+        newNote.type = selectedMode;
         newNote.column = column;
         numNotesVisible++;
 
@@ -238,6 +240,13 @@ public class ChartManager : MonoBehaviour
                 if (selectedMode == "Blast")
                 {
                     noteObject = Instantiate(editorBlast);
+                } else if (selectedMode == "Yellow")
+                {
+                    noteObject = Instantiate(editorYellow);
+                }
+                else if (selectedMode == "Blue")
+                {
+                    noteObject = Instantiate(editorBlue);
                 } else
                 {
                     noteObject = Instantiate(editorNote);
@@ -270,7 +279,7 @@ public class ChartManager : MonoBehaviour
         Debug.Log("displaying notechart!");
         for (int i = 0; i < chart.list.Count; i++)
         {
-            Debug.Log("note " + i + ": time = " + chart.list[i].time + ", column = " + chart.list[i].column + ", blast = " + chart.list[i].blast);
+            Debug.Log("note " + i + ": time = " + chart.list[i].time + ", column = " + chart.list[i].column + ", type = " + chart.list[i].type);
         }
         Debug.Log("finished notechart!");
     }
@@ -327,11 +336,18 @@ public class ChartManager : MonoBehaviour
         {
             GameObject noteObject;
             float noteXPosition = leftmostColumnPlacement + (columnWidth * chart.list[i].column);
-            if (chart.list[i].blast)
+            if (chart.list[i].type == "Blast")
             {
                 noteObject = Instantiate(editorBlast);
             }
-            else
+            else if (chart.list[i].type == "Yellow")
+            {
+                noteObject = Instantiate(editorYellow) ;
+            }
+            else if (chart.list[i].type == "Blue")
+            {
+                noteObject = Instantiate(editorBlue);
+            } else
             {
                 noteObject = Instantiate(editorNote);
             }

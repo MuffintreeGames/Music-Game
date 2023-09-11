@@ -38,7 +38,6 @@ public class FollowPath : MonoBehaviour
     {
         if (currentIndex == -1 || timeSinceChangedGoal >= targetSpeed/*(((transform.position.x - goalPosition.x) * direction.x >= 0 ) && ((transform.position.y - goalPosition.y) * direction.y >= 0))*/)
         {
-            Debug.Log("currently at " + transform.position + "; goal is at " + goalPosition);
             currentIndex++;
             
             if (currentIndex < waypoints.Length && currentIndex < waypointSpeeds.Length)
