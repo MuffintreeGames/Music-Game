@@ -105,7 +105,7 @@ public class NoteSpawner : MonoBehaviour
                 {
                     float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
 
-                    Instantiate(BlastNote, new Vector2(xPos, spawnY), Quaternion.identity);
+                    Instantiate(BlastNote, new Vector2(xPos, spawnY), Quaternion.Euler(0, 0, 45f));
                     notesSpawned++;
                 }
             }

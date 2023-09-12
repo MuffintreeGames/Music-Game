@@ -76,10 +76,56 @@ public class ChartManager : MonoBehaviour
         }
 
         currentTime += Time.deltaTime;
+        CheckForKeyPresses();
         PerformNoteUpkeep();
         UpdateTimeline();
         //Debug.Log("current first index: " + firstVisibleIndex + "; current num of notes: " + numNotesVisible);
     }
+
+    void CheckForKeyPresses()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            PlaceNote(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            PlaceNote(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            PlaceNote(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            PlaceNote(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            PlaceNote(4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            PlaceNote(5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            PlaceNote(6);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            PlaceNote(7);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            PlaceNote(8);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            PlaceNote(9);
+        }
+    }
+    
 
     void PerformNoteUpkeep()    //use whenever doing anything that changes the note positions
     {
@@ -145,7 +191,6 @@ public class ChartManager : MonoBehaviour
         //Debug.Log("first index: " + firstVisibleIndex + "; num of notes: " + numNotesVisible);
         for (int i = firstVisibleIndex - 1; i >= 0; i--)
         {
-            Debug.Log("comparing " + currentTime + " to " + chart.list[i].time);
             if (chart.list[i].time < currentTime - placementPosition * screenTimeRange)
             {
                 return;

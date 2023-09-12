@@ -28,6 +28,7 @@ public class BlastNote : MonoBehaviour
         else if (collision.gameObject.layer == LayerMask.NameToLayer("FailBox"))
         {
             Debug.Log("failed to hit blast note!");
+            HealthTracker.TakeDamage();
             Destroy(gameObject);
         }
     }
