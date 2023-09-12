@@ -30,7 +30,8 @@ public class ParamVisual : MonoBehaviour
                         enableX ? (Visualization.bandBuffer[band] * scaleXMultiplier) + startXScale : transform.localScale.x,
                         enableY ? (Visualization.bandBuffer[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
                         transform.localScale.z);
-            if (enableColor) sprite.color = new Color(1f, 0.5f - 0.5f * Visualization.audioBandBuffer[band], 0f, Math.Max(Visualization.audioBandBuffer[band], 0.2f));
+            if (enableColor) sprite.color = new Color(1f, 0.5f - 0.5f * Visualization.audioBandBuffer[band], 0f, Math.Min(Visualization.audioBandBuffer[band], 0.3f));
+            else sprite.color = new Color(red, green, blue, Math.Min(Visualization.freqBand[band], 0.3f));
         }
         if (!useBuffer)
         {
@@ -38,7 +39,7 @@ public class ParamVisual : MonoBehaviour
                         enableX ? (Visualization.freqBand[band] * scaleXMultiplier) + startXScale : transform.localScale.x,
                         enableY ? (Visualization.freqBand[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
                         transform.localScale.z);
-            if (enableColor) sprite.color = new Color(red, green, blue, Math.Max(Visualization.freqBand[band], 0.2f));
+            sprite.color = new Color(red, green, blue, Math.Min(Visualization.freqBand[band], 0.3f));
 
         }
     }
