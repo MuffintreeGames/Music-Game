@@ -16,13 +16,15 @@ public class PositionTracker : MonoBehaviour
     static float blastAllowance = 0.2f; //range at which the soundwaves will trigger a blast
     static float blastCooldown = 0.25f; //delay until second blast can happen
     static float blastImpulse = 8f;
-    static float blastDecel = 10f;
+    static float blastDecel = 14f;
     static float blastStopSpeed = 2f;   //when blast velocity reaches this speed, allow control to resume
     static float blastHeight = 0f;
 
     float remainingBlastCooldown = 0f;
     float currentBlastVelocity = 0f;
     bool canControl = true;
+
+    
     // Start is called before the first frame update
     void Start()
     {

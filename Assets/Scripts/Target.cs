@@ -29,6 +29,7 @@ public class Target : MonoBehaviour
                 if (!collision.gameObject.GetComponentInParent<MusicBar>().IsCurrentlyBlue())
                 {
                     Debug.Log("hit the wrong color!");
+                    HealthTracker.TakeDamage();
                     Destroy(gameObject);
                 } else
                 {
@@ -41,6 +42,7 @@ public class Target : MonoBehaviour
                 if (!collision.gameObject.GetComponentInParent<MusicBar>().IsCurrentlyYellow())
                 {
                     Debug.Log("hit the wrong color!");
+                    HealthTracker.TakeDamage();
                     Destroy(gameObject);
                 }
                 else
@@ -56,6 +58,7 @@ public class Target : MonoBehaviour
         } else if (collision.gameObject.layer == LayerMask.NameToLayer("FailBox"))
         {
             Debug.Log("failed to hit target!");
+            HealthTracker.TakeDamage();
             Destroy(gameObject);
         }
     }

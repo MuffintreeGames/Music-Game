@@ -11,11 +11,14 @@ public class MusicBar : MonoBehaviour
 
     PositionTracker positionTracker;
     float minScale = 0.1f;
-    float maxScale = .8f;
+    float maxMaxScale = .8f;    //the name makes sense I promise
+    float currentMaxScale = .8f;
     float combinedMaxScale = 1.4f;
     float detectionDistance = 2f;
     bool currentlyYellow = false;
     bool currentlyBlue = false;
+
+    static float minHealthFactor = 0.5f;   //maximum scale subtracted by as much as this number as health approaches 0
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +34,13 @@ public class MusicBar : MonoBehaviour
             Debug.LogError("can't find position tracker! Abort!");
             return;
         }
+        AdjustMaxScale();
         SetVisuals();
+    }
+
+    void AdjustMaxScale()   //if hp is less than 100, reduce max scale
+    {
+        currentMaxScale = maxMaxScale - (minHealthFactor * 0.01f * (100f - HealthTracker.publicHealth));
     }
 
     Color GetCurrentWasdColor()
@@ -81,7 +90,7 @@ public class MusicBar : MonoBehaviour
         {
             currentlyBlue = true;
             currentlyYellow = true;
-            newScale = minScale + ((detectionDistance - distanceFromArrowSound) / detectionDistance * (maxScale - minScale)) + ((detectionDistance - distanceFromWasdSound) / detectionDistance * (maxScale - minScale));
+            newScale = minScale + ((detectionDistance - distanceFromArrowSound) / detectionDistance * (currentMaxScale - minScale)) + ((detectionDistance - distanceFromWasdSound) / detectionDistance * (currentMaxScale - minScale));
             if (positionTracker.colorsSwapped)
             {
                 newColor = new Color(defaultColor.r + ((arrowColor.r - defaultColor.r) * ((detectionDistance - distanceFromWasdSound) / detectionDistance)), defaultColor.g - (defaultColor.g * (detectionDistance * 2 - distanceFromArrowSound - distanceFromWasdSound)), defaultColor.b + ((wasdColor.b - defaultColor.b) * ((detectionDistance - distanceFromArrowSound) / detectionDistance)));
@@ -96,14 +105,14 @@ public class MusicBar : MonoBehaviour
             {
                 currentlyBlue = positionTracker.colorsSwapped;
                 currentlyYellow = !positionTracker.colorsSwapped;
-                newScale = minScale + ((detectionDistance - distanceFromArrowSound) / detectionDistance * (maxScale - minScale));
+                newScale = minScale + ((detectionDistance - distanceFromArrowSound) / detectionDistance * (currentMaxScale - minScale));
                 newColor = new Color(defaultColor.r + ((currentArrowColor.r - defaultColor.r) * ((detectionDistance - distanceFromArrowSound) / detectionDistance)), defaultColor.g + ((currentArrowColor.g - defaultColor.g) * ((detectionDistance - distanceFromArrowSound) / detectionDistance)), defaultColor.b + ((currentArrowColor.b - defaultColor.b) * ((detectionDistance - distanceFromArrowSound) / detectionDistance)));
             }
             else if (distanceFromWasdSound < detectionDistance)
             {
                 currentlyBlue = !positionTracker.colorsSwapped;
                 currentlyYellow = positionTracker.colorsSwapped;
-                newScale = minScale + ((detectionDistance - distanceFromWasdSound) / detectionDistance * (maxScale - minScale));
+                newScale = minScale + ((detectionDistance - distanceFromWasdSound) / detectionDistance * ((currentMaxScale - minScale)));
                 newColor = new Color(defaultColor.r - ((defaultColor.r - currentWasdColor.r) * ((detectionDistance - distanceFromWasdSound) / detectionDistance)), defaultColor.g + ((currentWasdColor.g - defaultColor.g) * ((detectionDistance - distanceFromWasdSound) / detectionDistance)), defaultColor.b + ((currentWasdColor.b - defaultColor.b) * ((detectionDistance - distanceFromWasdSound) / detectionDistance)));
             } else
             {
