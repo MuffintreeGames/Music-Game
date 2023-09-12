@@ -7,13 +7,13 @@ public class Visualization : MonoBehaviour
 {
     AudioSource audioSource;
     float[] samples = new float[512];
-    public static float[] freqBand = new float[8];
-    public static float[] bandBuffer = new float[8];
-    float[] bufferDecrease = new float[8];
+    public static float[] freqBand = new float[12];
+    public static float[] bandBuffer = new float[12];
+    float[] bufferDecrease = new float[12];
 
-    float[] freqBandHighest = new float[8];
-    public static float[] audioBand = new float[8];
-    public static float[] audioBandBuffer = new float[8];
+    float[] freqBandHighest = new float[12];
+    public static float[] audioBand = new float[12];
+    public static float[] audioBandBuffer = new float[12];
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +32,7 @@ public class Visualization : MonoBehaviour
 
     void CreateAudioBands()
     {
-        for (int g = 0; g < 8; ++g)
+        for (int g = 0; g < 12; ++g)
         {
             if (freqBand[g] > freqBandHighest[g])
             {
@@ -53,35 +53,35 @@ public class Visualization : MonoBehaviour
 
     void BandBuffer()
     {
-        for (int g = 0; g < 8; ++g)
+        for (int g = 0; g < 12; ++g)
         {
             if (freqBand[g] > bandBuffer[g]) {
                 bandBuffer[g] = freqBand[g];
-                bufferDecrease[g] = 0.2f; // magic number fuck fuck fuck
+                bufferDecrease[g] = 0.02f; // magic number fuck fuck fuck
             }
 
             if (freqBand[g] < bandBuffer[g])
             {
-                bufferDecrease[g] = (bandBuffer[g] - freqBand[g]) / 8;
+                bufferDecrease[g] = (bandBuffer[g] - freqBand[g]) / 16;
                 bandBuffer[g] -= bufferDecrease[g];
                 //bandBuffer[g] -= bufferDecrease[g];
                 //bufferDecrease[g] *= 1.2f; more magic fuck fuck fuck
             }
         }
     }
+
+
     void MakeFrequencyBands()
     {
-        int count = 0;
 
-        for (int i = 0; i < 8; i++)
+
+        int count = 0;
+        int[] samplesXBand = { 2, 4, 8, 8, 8, 16, 16, 32, 32, 64, 64, 258 };
+        for (int i = 0; i < 12; ++i)
         {
             float average = 0;
-            int sampleCount = (int)Mathf.Pow(2, i) * 2;
+            int sampleCount = samplesXBand[i];
 
-            if (i == 7)
-            {
-                sampleCount += 2;
-            }
             for (int j = 0; j < sampleCount; j++)
             {
                 average += samples[count] * (count + 1);
