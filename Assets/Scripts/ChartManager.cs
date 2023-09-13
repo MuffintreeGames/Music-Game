@@ -44,6 +44,8 @@ public class ChartManager : MonoBehaviour
     bool shortPause = false;
     bool longPause = false;
 
+    static float preludeTime = 1f;
+
     static float screenTimeRange = 7f;
     static float placementPosition = 0.5f;  //where in current range represents current time (percentage based; 0.5 means halfway through range)
 
@@ -59,19 +61,22 @@ public class ChartManager : MonoBehaviour
     {
         chart = new NoteList();
         visibleNotes = new List<GameObject>();
-        songLength = songSource.clip.length;
+        songLength = songSource.clip.length + preludeTime;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (IsPaused())
+        if (IsPaused() || !PreludeEnded())
         {
             songSource.Stop();
-            return;
-        } else if (!songSource.isPlaying)
+            if (IsPaused())
+            {
+                return;
+            }
+        } else if (!songSource.isPlaying )
         {
-            songSource.time = currentTime;
+            songSource.time = GetPlaceInSong();
             songSource.Play();
         }
 
@@ -80,6 +85,16 @@ public class ChartManager : MonoBehaviour
         PerformNoteUpkeep();
         UpdateTimeline();
         //Debug.Log("current first index: " + firstVisibleIndex + "; current num of notes: " + numNotesVisible);
+    }
+
+    float GetPlaceInSong()
+    {
+        return Mathf.Max(currentTime - preludeTime, 0f);
+    }
+
+    bool PreludeEnded()
+    {
+        return currentTime >= preludeTime;
     }
 
     void CheckForKeyPresses()
@@ -334,7 +349,7 @@ public class ChartManager : MonoBehaviour
         Debug.Log("updating song position!");
         currentTime = Mathf.Clamp(timeline.value * songLength, 0f, songLength);
         //songSource.Stop();
-        songSource.time = currentTime;
+        songSource.time = GetPlaceInSong();
         /*if (currentTime < songLength)
         {
             songSource.Play();
@@ -345,7 +360,7 @@ public class ChartManager : MonoBehaviour
     public void SkipForward()
     {
         currentTime = Mathf.Min(currentTime + skipDuration, songLength);
-        songSource.time = currentTime;
+        songSource.time = GetPlaceInSong();
         PerformNoteUpkeep();
         UpdateTimeline();
     }
@@ -353,7 +368,7 @@ public class ChartManager : MonoBehaviour
     public void SkipBackward()
     {
         currentTime = Mathf.Max(currentTime - skipDuration, 0f);
-        songSource.time = currentTime;
+        songSource.time = GetPlaceInSong();
         PerformNoteUpkeep();
         UpdateTimeline();
     }

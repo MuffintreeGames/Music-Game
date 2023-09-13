@@ -5,8 +5,8 @@ using UnityEngine;
 public class Blast : MonoBehaviour
 {
     static float lifespan = 0.5f;
-    static float initialScale = 4f;
-    static float finalScale = 8f;
+    static float initialScale = 2f;
+    static float finalScale = 4f;
 
     float timeLeft = 0.2f;
     // Start is called before the first frame update
