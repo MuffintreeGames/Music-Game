@@ -40,7 +40,7 @@ public class MusicBar : MonoBehaviour
 
     void AdjustMaxScale()   //if hp is less than 100, reduce max scale
     {
-        currentMaxScale = maxMaxScale - (minHealthFactor * 0.01f * (100f - HealthTracker.publicHealth));
+        currentMaxScale = Mathf.Max(minScale, maxMaxScale - (minHealthFactor * 0.01f * (100f - HealthTracker.publicHealth)));
     }
 
     Color GetCurrentWasdColor()

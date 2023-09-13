@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0622f049dd5966440aa0d8795ea1a34d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ownPath: {fileID: 264252074029470828}
   targetColor: Yellow
 --- !u!50 &1457636497617164787
 Rigidbody2D:
@@ -170,7 +171,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &264252074029470828
 MonoBehaviour:

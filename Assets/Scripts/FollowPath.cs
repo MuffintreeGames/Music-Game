@@ -66,4 +66,14 @@ public class FollowPath : MonoBehaviour
         transform.position = Vector2.SmoothDamp(transform.position, goalPosition, ref velocity, targetSpeed);
         //transform.position = new Vector2(transform.position.x + speed.x * Time.deltaTime, transform.position.y + speed.y * Time.deltaTime);
     }
+
+    public bool OnFinalPath()
+    {
+        return currentIndex == waypoints.Length - 1;
+    }
+
+    public Vector2 GetDestination()
+    {
+        return positions[currentIndex];
+    }
 }
