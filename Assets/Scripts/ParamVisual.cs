@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Dan.Main;
 
 public class ParamVisual : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ParamVisual : MonoBehaviour
     public bool enableX, enableY = false;
     public float startXScale, scaleXMultiplier, startYScale, scaleYMultiplier;
     public bool enableColor = false;
+    public bool enableLeaderboard = false;
     public SpriteRenderer sprite;
     private float red, green, blue;
     public bool useBuffer;
@@ -18,8 +20,8 @@ public class ParamVisual : MonoBehaviour
         red = sprite.color.r;
         green = sprite.color.g;
         blue = sprite.color.b;
-
-    }
+        enableLeaderboard = false;
+}
 
     // Update is called once per frame
     void Update()
@@ -28,16 +30,25 @@ public class ParamVisual : MonoBehaviour
         {
             if (band == 12)
             {
-                float average = 0;
-                for (int g = 0; g < 12; ++g)
+                Vector3 targetScale;
+                if (enableLeaderboard)
                 {
-                    average += Visualization.bandBuffer[g];
+                    targetScale = new Vector3(1.5f, 1.5f, transform.localScale.z);
+                    // call leaderboard code and update child text object.
+                    return;
+                } else
+                {
+                    float average = 0;
+                    for (int g = 0; g < 12; ++g)
+                    {
+                        average += Visualization.bandBuffer[g];
+                    }
+                    average /= 12;
+                    targetScale = new Vector3(
+                        (average * scaleXMultiplier) + startXScale,
+                        (average * scaleYMultiplier) + startYScale,
+                        transform.localScale.z);
                 }
-                average /= 12;
-                Vector3 targetScale = new Vector3(
-                    enableX ? (average * scaleXMultiplier) + startXScale : transform.localScale.x,
-                    enableY ? (average * scaleYMultiplier) + startYScale : transform.localScale.y,
-                    transform.localScale.z);
 
                 transform.localScale = Vector3.MoveTowards(
                 transform.localScale,
