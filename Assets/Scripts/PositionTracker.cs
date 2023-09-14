@@ -43,6 +43,12 @@ public class PositionTracker : MonoBehaviour
         UpdateWavePositions();
         ApplyBlastDeceleration();
         CheckForBlast();
+
+        if (Input.GetButtonDown("ColorSwap"))
+        {
+            Debug.Log("swapping colors!");
+            SwapColors();
+        }
     }
 
     void UpdateWavePositions()
@@ -104,6 +110,10 @@ public class PositionTracker : MonoBehaviour
         currentBlastVelocity = blastImpulse;
         canControl = false;
         Instantiate(blast, new Vector2(wasdSoundPosition + (wasdSoundPosition - arrowSoundPosition)/2, blastHeight), Quaternion.identity);
+    }
+
+    void SwapColors()
+    {
         colorsSwapped = !colorsSwapped;
     }
 }

@@ -17,11 +17,13 @@ public class NoteSpawner : MonoBehaviour
 
     NoteList chart;
     float currentTime;
+    float checkpointTime;
+    bool checkpointReached = false;
     int chartIndex = 0;
 
     static float columnWidth = 1.778f; //change both of these if column width/positioning is changed
     static float leftmostColumnPlacement = -8f;
-    static float countdownTime = 1f;
+    static float countdownTime = 1f;    //use for effects when starting level like a countdown
     static float preludeTime = 2f;
 
     static float normalNoteDelay = 1.5f;
@@ -39,6 +41,7 @@ public class NoteSpawner : MonoBehaviour
         Debug.Log("chart loaded: " + chart.list[0].time);
         preludeTimeLeft = preludeTime;
         countdownTimeLeft = countdownTime;
+        checkpointTime = chart.checkpointTime;// + preludeTime;
     }
 
     // Update is called once per frame
@@ -68,6 +71,11 @@ public class NoteSpawner : MonoBehaviour
         SpawnNewBlastNotes();
         chartIndex += notesSpawned;
         UpdateTimeline();
+        if (currentTime >= checkpointTime && !checkpointReached)
+        {
+            Debug.Log("hit the checkpoint!");
+            checkpointReached = true;
+        }
     }
 
     void UpdateTimeline()
@@ -121,6 +129,17 @@ public class NoteSpawner : MonoBehaviour
                     notesSpawned++;
                 }
             }
+        }
+    }
+
+    public void ResetToCheckpoint()
+    {
+        if (checkpointReached)
+        {
+            currentTime = checkpointTime;
+        } else
+        {
+            currentTime = 0;
         }
     }
 }

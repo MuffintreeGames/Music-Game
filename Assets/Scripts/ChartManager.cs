@@ -18,6 +18,7 @@ public class Note
 [Serializable]
 public class NoteList
 {
+    public float checkpointTime;
     public List<Note> list = new List<Note>();
 }
 
@@ -31,6 +32,7 @@ public class ChartManager : MonoBehaviour
     public AudioSource songSource;
     public Slider timeline;
     public TMP_InputField importField;
+    public GameObject checkpointLine;
 
     public static string selectedMode = "None";
 
@@ -60,6 +62,7 @@ public class ChartManager : MonoBehaviour
     void Start()
     {
         chart = new NoteList();
+        chart.checkpointTime = -1f;
         visibleNotes = new List<GameObject>();
         songLength = songSource.clip.length + preludeTime;
     }
@@ -154,6 +157,7 @@ public class ChartManager : MonoBehaviour
         AddNotesToTop();
         AddNotesToBottom();
         UpdateNotePositions();
+        UpdateCheckpointLine();
     }
 
     bool IsPaused()
@@ -324,6 +328,19 @@ public class ChartManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    void UpdateCheckpointLine()
+    {
+        if (chart.checkpointTime < 0f)  //checkpoint not placed
+        {
+            return;
+        }
+
+        float timeDifference = chart.checkpointTime - currentTime;
+        float percentageYPosition = ((placementPosition * screenTimeRange) + timeDifference) / screenTimeRange;
+        float yPosition = minHeight + (percentageYPosition * (maxHeight - minHeight));// + Mathf.Max(timeDifference, 0) * maxHeight * (1-placementPosition) + Mathf.Min(timeDifference, 0) ;
+        noteObject.transform.localPosition = new Vector2(noteObject.transform.localPosition.x, yPosition);
     }
 
     public void ToggleMode(string targetMode)
