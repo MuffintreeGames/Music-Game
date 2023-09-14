@@ -22,9 +22,9 @@ public class NoteSpawner : MonoBehaviour
     static float columnWidth = 1.778f; //change both of these if column width/positioning is changed
     static float leftmostColumnPlacement = -8f;
     static float countdownTime = 1f;
-    static float preludeTime = 1f;
+    static float preludeTime = 2f;
 
-    static float normalNoteDelay = 1.55f;
+    static float normalNoteDelay = 1.5f;
     static float blastNoteDelay = 1.9f;
 
     float countdownTimeLeft = 0f;
