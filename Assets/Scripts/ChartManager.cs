@@ -44,7 +44,7 @@ public class ChartManager : MonoBehaviour
     bool shortPause = false;
     bool longPause = false;
 
-    static float preludeTime = 1f;
+    static float preludeTime = 2f;
 
     static float screenTimeRange = 7f;
     static float placementPosition = 0.5f;  //where in current range represents current time (percentage based; 0.5 means halfway through range)
@@ -67,14 +67,14 @@ public class ChartManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsPaused() || !PreludeEnded())
+        if (IsPaused() || !PreludeEnded() || SongOver())
         {
             songSource.Stop();
-            if (IsPaused())
+            if (IsPaused() || SongOver())
             {
                 return;
             }
-        } else if (!songSource.isPlaying )
+        } else if (!songSource.isPlaying)
         {
             songSource.time = GetPlaceInSong();
             songSource.Play();
@@ -95,6 +95,11 @@ public class ChartManager : MonoBehaviour
     bool PreludeEnded()
     {
         return currentTime >= preludeTime;
+    }
+
+    bool SongOver()
+    {
+        return currentTime > songLength;
     }
 
     void CheckForKeyPresses()
