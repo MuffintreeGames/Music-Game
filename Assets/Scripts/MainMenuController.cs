@@ -22,7 +22,7 @@ public class MainMenuController : MonoBehaviour
 
     public void LoadGame()
     {
-        SceneManager.LoadScene("GamePlay");
+        SceneManager.LoadScene("Gameplay");
     }
 
     public void LoadMainMenu()
@@ -33,6 +33,11 @@ public class MainMenuController : MonoBehaviour
     public void LoadLevelSelect()
     {
         SceneManager.LoadScene("LevelSelect");
+    }
+
+    public void LoadLevelEditor()
+    {
+        SceneManager.LoadScene("LevelEditor");
     }
 
     public void LoadCredits()
