@@ -13,28 +13,28 @@ public class NoteSpawner : MonoBehaviour
     public Slider timeline;
     public AudioSource songSource;
 
-    static float spawnY = 6f;
+    protected static float spawnY = 6f;
 
-    NoteList chart;
-    float currentTime;
-    float checkpointTime;
-    bool checkpointReached = false;
-    int chartIndex = 0;
+    protected NoteList chart;
+    protected float currentTime;
+    protected float checkpointTime;
+    protected bool checkpointReached = false;
+    protected int chartIndex = 0;
 
-    static float columnWidth = 1.778f; //change both of these if column width/positioning is changed
-    static float leftmostColumnPlacement = -8f;
-    static float countdownTime = 1f;    //use for effects when starting level like a countdown
-    static float preludeTime = 2f;
+    protected static float columnWidth = 1.778f; //change both of these if column width/positioning is changed
+    protected static float leftmostColumnPlacement = -8f;
+    protected static float countdownTime = 1f;    //use for effects when starting level like a countdown
+    protected static float preludeTime = 2f;
 
-    static float normalNoteDelay = 1.5f;
-    static float blastNoteDelay = 1.9f;
+    protected static float normalNoteDelay = 1.5f;
+    protected static float blastNoteDelay = 1.9f;
 
-    float countdownTimeLeft = 0f;
-    float preludeTimeLeft = 0f;
+    protected float countdownTimeLeft = 0f;
+    protected float preludeTimeLeft = 0f;
 
-    bool deathPause = false;
+    protected bool deathPause = false;
 
-    int notesSpawned;
+    protected int notesSpawned;
     // Start is called before the first frame update
     void Start()
     {
@@ -104,7 +104,7 @@ public class NoteSpawner : MonoBehaviour
                 else
                 {
                     float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
-
+                    Debug.Log("spawning note at " + currentTime);
                     switch (nextNote.type)
                     {
                         case "Yellow": Instantiate(YellowNote, new Vector2(xPos, spawnY), Quaternion.identity); break;
