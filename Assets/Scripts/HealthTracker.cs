@@ -1,10 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+public class DeathEvent : UnityEvent
+{
+
+}
+
+public class ResetEvent : UnityEvent
+{
+
+}
 
 public class HealthTracker : MonoBehaviour
 {
     public static float publicHealth = 100f;
+    public static DeathEvent playerDeath;
+    public static ResetEvent songReset;
+
     static float internalHealth = 100f;
 
     static float damageTakenPerHit = 25f;
@@ -13,29 +27,63 @@ public class HealthTracker : MonoBehaviour
 
     static float timeLeftToHeal = 0f;
     static float rateOfPublicChange = 50f;
+
+    static float pauseTime = 1.5f;
+    static float pauseTimeLeft = 0f;
+
+    static float resetTime = 1.5f;
+    static float resetTimeLeft = 1.5f;
     // Start is called before the first frame update
     void Start()
     {
         publicHealth = 100f;
         internalHealth = 100f;
+        if (playerDeath == null)
+        {
+            playerDeath = new DeathEvent();
+        }
+        if (songReset == null)
+        {
+            songReset = new ResetEvent();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (timeLeftToHeal > 0f)
+        if (pauseTimeLeft > 0f)
         {
-            timeLeftToHeal -= Time.deltaTime;
-        } else if (publicHealth < 100f)
+            pauseTimeLeft -= Time.deltaTime;
+            if (pauseTimeLeft <= 0f)
+            {
+                songReset.Invoke();
+                ResetHealth();
+            }
+        }
+        else
         {
-            internalHealth += rateOfHealing * Time.deltaTime;
-            internalHealth = Mathf.Min(100f, internalHealth);
+            if (timeLeftToHeal > 0f)
+            {
+                timeLeftToHeal -= Time.deltaTime;
+            }
+            else if (publicHealth < 100f)
+            {
+                internalHealth += rateOfHealing * Time.deltaTime;
+                internalHealth = Mathf.Min(100f, internalHealth);
+            }
         }
 
         if (publicHealth != internalHealth)
         {
-            publicHealth += Mathf.Clamp(internalHealth-publicHealth, -rateOfPublicChange * Time.deltaTime, rateOfPublicChange * Time.deltaTime);
+            publicHealth += Mathf.Clamp(internalHealth - publicHealth, -rateOfPublicChange * Time.deltaTime, rateOfPublicChange * Time.deltaTime);
         }
+
+    }
+
+    void ResetHealth()
+    {
+        internalHealth = 100f;
+        publicHealth = 100f;
     }
 
     public static void TakeDamage()
@@ -45,6 +93,8 @@ public class HealthTracker : MonoBehaviour
         if (internalHealth <= 0)
         {
             Debug.Log("deadge");
+            playerDeath.Invoke();
+            pauseTimeLeft = pauseTime;
         }
         timeLeftToHeal = timeToStartHealing;
     }

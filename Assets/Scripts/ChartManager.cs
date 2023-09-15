@@ -42,6 +42,8 @@ public class ChartManager : MonoBehaviour
     List<GameObject> visibleNotes;
     int firstVisibleIndex = 0;  //earliest note in song that is currently on screen
     int numNotesVisible = 0;
+
+    GameObject spawnedCheckpointLine = null;
     
     bool shortPause = false;
     bool longPause = false;
@@ -330,17 +332,32 @@ public class ChartManager : MonoBehaviour
         }
     }
 
+    public void PlaceCheckpointLine()
+    {
+        chart.checkpointTime = currentTime;
+        if (spawnedCheckpointLine == null)
+        {
+            spawnedCheckpointLine = Instantiate(checkpointLine);
+            spawnedCheckpointLine.transform.SetParent(targetCanvas.transform);
+        }
+        UpdateCheckpointLine();
+    }
+
     void UpdateCheckpointLine()
     {
-        if (chart.checkpointTime < 0f)  //checkpoint not placed
+        if (chart.checkpointTime < 0f || spawnedCheckpointLine == null)  //checkpoint not placed
         {
             return;
         }
 
+        /*if (chart.checkpointTime < currentTime - placementPosition * screenTimeRange || chart.checkpointTime > currentTime + placementPosition * screenTimeRange) { //out of visible range
+            return;
+        }*/
+
         float timeDifference = chart.checkpointTime - currentTime;
         float percentageYPosition = ((placementPosition * screenTimeRange) + timeDifference) / screenTimeRange;
         float yPosition = minHeight + (percentageYPosition * (maxHeight - minHeight));// + Mathf.Max(timeDifference, 0) * maxHeight * (1-placementPosition) + Mathf.Min(timeDifference, 0) ;
-        noteObject.transform.localPosition = new Vector2(noteObject.transform.localPosition.x, yPosition);
+        spawnedCheckpointLine.transform.localPosition = new Vector2(spawnedCheckpointLine.transform.localPosition.x, yPosition);
     }
 
     public void ToggleMode(string targetMode)

@@ -24,17 +24,26 @@ public class PositionTracker : MonoBehaviour
     float currentBlastVelocity = 0f;
     bool canControl = true;
 
+    bool deathPause = false;
+
     
     // Start is called before the first frame update
     void Start()
     {
         wasdSoundPosition = -5f;
         arrowSoundPosition = 5f;
+        HealthTracker.playerDeath.AddListener(PauseOnDeath);
+        HealthTracker.songReset.AddListener(ResetPositions);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (deathPause)
+        {
+            return;
+        }
+
         if (remainingBlastCooldown > 0f)
         {
             remainingBlastCooldown -= Time.deltaTime;
@@ -115,5 +124,18 @@ public class PositionTracker : MonoBehaviour
     void SwapColors()
     {
         colorsSwapped = !colorsSwapped;
+    }
+
+    void PauseOnDeath()
+    {
+        deathPause = true;
+    }
+
+    void ResetPositions()
+    {
+        wasdSoundPosition = -5f;
+        arrowSoundPosition = 5f;
+        colorsSwapped = false;
+        deathPause = false;
     }
 }

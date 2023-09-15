@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class BlastNote : MonoBehaviour
@@ -8,7 +9,7 @@ public class BlastNote : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        HealthTracker.songReset.AddListener(OnPlayerRewind);
     }
 
     // Update is called once per frame
@@ -31,5 +32,10 @@ public class BlastNote : MonoBehaviour
             HealthTracker.TakeDamage();
             Destroy(gameObject);
         }
+    }
+
+    void OnPlayerRewind()
+    {
+        Destroy(gameObject);
     }
 }

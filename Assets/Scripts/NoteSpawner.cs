@@ -32,6 +32,8 @@ public class NoteSpawner : MonoBehaviour
     float countdownTimeLeft = 0f;
     float preludeTimeLeft = 0f;
 
+    bool deathPause = false;
+
     int notesSpawned;
     // Start is called before the first frame update
     void Start()
@@ -42,11 +44,16 @@ public class NoteSpawner : MonoBehaviour
         preludeTimeLeft = preludeTime;
         countdownTimeLeft = countdownTime;
         checkpointTime = chart.checkpointTime;// + preludeTime;
+        deathPause = false;
+        HealthTracker.playerDeath.AddListener(PauseOnDeath);
+        HealthTracker.songReset.AddListener(ResetToCheckpoint);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (deathPause) return;
+
         if (countdownTimeLeft > 0f) { 
             countdownTimeLeft -= Time.deltaTime;
             /*if (countdownTimeLeft < 0f )
@@ -132,14 +139,41 @@ public class NoteSpawner : MonoBehaviour
         }
     }
 
-    public void ResetToCheckpoint()
+    void PauseOnDeath()
+    {
+        songSource.Stop();
+        deathPause = true;
+    }
+
+    void ResetToCheckpoint()
     {
         if (checkpointReached)
         {
-            currentTime = checkpointTime;
+            currentTime = checkpointTime - preludeTime;
+            preludeTimeLeft = preludeTime;
+            songSource.time = currentTime;// - preludeTime;
+            //songSource.Play();
+            //chartIndex = 0;
+            RecalculateIndex();
         } else
         {
             currentTime = 0;
+            preludeTimeLeft = preludeTime;
+            songSource.time = currentTime;
+            chartIndex = 0;
+        }
+        deathPause = false;
+    }
+
+    void RecalculateIndex() //after going to checkpoint, need to find new chart index value
+    {
+        while (chart.list[chartIndex - 1].time > currentTime + preludeTime)
+        {
+            chartIndex--;
+            if (chartIndex == 0)
+            {
+                return;
+            }
         }
     }
 }

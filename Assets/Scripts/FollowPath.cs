@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class FollowPath : MonoBehaviour
@@ -21,6 +22,8 @@ public class FollowPath : MonoBehaviour
     static float accelTime = 0.1f;
     static float goalAllowance = 0.001f;
 
+    bool paused = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,11 +34,14 @@ public class FollowPath : MonoBehaviour
         {
             positions[i] = waypoints[i].position;
         }
+        HealthTracker.playerDeath.AddListener(OnPlayerDeath);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (paused) return;
+
         if (currentIndex == -1 || timeSinceChangedGoal >= targetSpeed/*(((transform.position.x - goalPosition.x) * direction.x >= 0 ) && ((transform.position.y - goalPosition.y) * direction.y >= 0))*/)
         {
             currentIndex++;
@@ -75,5 +81,10 @@ public class FollowPath : MonoBehaviour
     public Vector2 GetDestination()
     {
         return positions[currentIndex];
+    }
+
+    void OnPlayerDeath()
+    {
+        paused = true;
     }
 }

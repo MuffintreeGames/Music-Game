@@ -14,15 +14,19 @@ public class Target : MonoBehaviour
     MusicBar collidingBar = null;
     Vector2 collisionPoint = Vector2.negativeInfinity;
     bool barUnderneath = false;
+    bool paused = false;
     // Start is called before the first frame update
     void Start()
     {
-        
+        HealthTracker.playerDeath.AddListener(OnPlayerDeath);
+        HealthTracker.songReset.AddListener(OnPlayerRewind);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (paused) return;
+
         RaycastHit2D hit = Physics2D.Raycast(transform.position, ownPath.GetDestination(), 10f, 1 << LayerMask.NameToLayer("MusicBar") | 1 << LayerMask.NameToLayer("FailBox"));
         if (hit.rigidbody != null)
         {
@@ -94,5 +98,15 @@ public class Target : MonoBehaviour
             Debug.Log("hit a target!");
             PointTracker.pointEvent.Invoke(points);
             Destroy(gameObject);
+    }
+
+    void OnPlayerDeath()
+    {
+        paused = true;
+    }
+
+    void OnPlayerRewind()
+    {
+        Destroy(gameObject);
     }
 }
