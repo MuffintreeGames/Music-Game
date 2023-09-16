@@ -48,7 +48,8 @@ public class Visualization : MonoBehaviour
 
     void GetSpectrumAudioSource()
     {
-        audioSource.GetSpectrumData(samples, 0, FFTWindow.Blackman);
+        //audioSource.GetSpectrumData(samples, 0, FFTWindow.Blackman); // USE ME
+        audioSource.GetSpectrumData(samples, 0, FFTWindow.BlackmanHarris);
     }
 
     void BandBuffer()

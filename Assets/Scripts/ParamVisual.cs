@@ -21,7 +21,7 @@ public class ParamVisual : MonoBehaviour
         green = sprite.color.g;
         blue = sprite.color.b;
         enableLeaderboard = false;
-}
+    }
 
     // Update is called once per frame
     void Update()
@@ -30,11 +30,11 @@ public class ParamVisual : MonoBehaviour
         {
             if (band == 12)
             {
-                Vector3 targetScale;
+                
                 if (enableLeaderboard)
                 {
-                    targetScale = new Vector3(1.5f, 1.5f, transform.localScale.z);
-                    // call leaderboard code and update child text object.
+                    // can we remove this?
+                    //transform.localScale = new Vector3(1.75f, 1.75f, transform.localScale.z);
                     return;
                 } else
                 {
@@ -44,18 +44,15 @@ public class ParamVisual : MonoBehaviour
                         average += Visualization.bandBuffer[g];
                     }
                     average /= 12;
-                    targetScale = new Vector3(
-                        (average * scaleXMultiplier) + startXScale,
-                        (average * scaleYMultiplier) + startYScale,
-                        transform.localScale.z);
-                }
 
-                transform.localScale = Vector3.MoveTowards(
-                transform.localScale,
-                targetScale,
-                Time.deltaTime * 30f);
-                sprite.color = new Color(red, green, blue, 0.1f);
-                return;
+                    Vector3 previousScale2 = transform.localScale;
+                    previousScale2.x = enableX ? Mathf.Lerp(previousScale2.x, (average * scaleXMultiplier) + startXScale, 60f * Time.deltaTime) : transform.localScale.x;
+                    previousScale2.y = enableY ? Mathf.Lerp(previousScale2.y, (average * scaleYMultiplier) + startYScale, 60f * Time.deltaTime) : transform.localScale.y;
+                    //Add delta time please
+                    transform.localScale = previousScale2;
+
+                    sprite.color = new Color(red, green, blue, 0.1f);
+                }
             }
 
             /*transform.localScale = new Vector3(
@@ -63,10 +60,17 @@ public class ParamVisual : MonoBehaviour
                 enableY ? (Visualization.audioBandBuffer[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
                 transform.localScale.z);*/
 
+            /* USE ME
             transform.localScale = new Vector3(
                 enableX ? (Visualization.bandBuffer[band] * scaleXMultiplier) + startXScale : transform.localScale.x,
                 enableY ? (Visualization.bandBuffer[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
-                transform.localScale.z);
+                transform.localScale.z);*/
+
+            Vector3 previousScale = transform.localScale;
+             previousScale.y = enableY ? Mathf.Lerp(previousScale.y, (Visualization.bandBuffer[band] * scaleYMultiplier) + startYScale, 60f * Time.deltaTime) : transform.localScale.y;
+             previousScale.x = enableX ? Mathf.Lerp(previousScale.x, (Visualization.bandBuffer[band] * scaleXMultiplier) + startXScale, 60f * Time.deltaTime) : transform.localScale.x;
+            //Add delta time please
+            transform.localScale = previousScale;
 
             //if (enableColor) sprite.color = new Color(1f, 0.5f - 0.5f * Visualization.audioBandBuffer[band], 0f, Math.Max(Math.Min(Visualization.audioBandBuffer[band], 0.3f), 0.05f));
             //else sprite.color = new Color(red, green, blue, Math.Max(Math.Min(Visualization.audioBandBuffer[band], 0.3f), 0.05f));
@@ -76,11 +80,12 @@ public class ParamVisual : MonoBehaviour
         if (!useBuffer)
         {
             transform.localScale = new Vector3(
-                        enableX ? (Visualization.freqBand[band] * scaleXMultiplier) + startXScale : transform.localScale.x,
-                        enableY ? (Visualization.freqBand[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
-                        transform.localScale.z);
-            sprite.color = new Color(red, green, blue, Math.Max(Math.Min(Visualization.audioBandBuffer[band], 0.3f), 0.05f));
+            enableX ? (Visualization.bandBuffer[band] * scaleXMultiplier) + startXScale : transform.localScale.x,
+            enableY ? (Visualization.bandBuffer[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
+            transform.localScale.z);
 
+            if (enableColor) sprite.color = new Color(1f, 0.7f - 0.7f * Visualization.bandBuffer[band], 0f, 0.2f);
+            else sprite.color = new Color(red, green, blue, 0.2f);
         }
     }
 }
