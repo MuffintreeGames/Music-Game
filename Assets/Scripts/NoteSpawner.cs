@@ -82,7 +82,13 @@ public class NoteSpawner : MonoBehaviour
         {
             Debug.Log("hit the checkpoint!");
             checkpointReached = true;
+            Leaderboard.MakeVisible();
         }
+        if (currentTime >= checkpointTime + 12f)
+        {
+            Leaderboard.MakeInvisible();
+        }
+
     }
 
     void UpdateTimeline()

@@ -11,7 +11,7 @@ public class PointEvent : UnityEvent<int>
 public class PointTracker : MonoBehaviour
 {
 
-    int points = 0;
+    public static int points = 0;
     public static PointEvent pointEvent;
     
     // Start is called before the first frame update

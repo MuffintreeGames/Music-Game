@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class NameHolder : MonoBehaviour
 {
-    public string username = "Anonymous";
+    public static string username = "Anonymous";
     // Start is called before the first frame update
     void Start()
     {

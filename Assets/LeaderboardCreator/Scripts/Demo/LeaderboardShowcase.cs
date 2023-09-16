@@ -44,7 +44,7 @@ namespace Dan.Demo
 
         public void Submit()
         {
-            Leaderboards.DemoSceneLeaderboard.UploadNewEntry(_playerUsernameInput.text, _playerScore, Callback, ErrorCallback);
+            //Leaderboards.DemoSceneLeaderboard.UploadNewEntry(_playerUsernameInput.text, _playerScore, Callback, ErrorCallback);
         }
         
         public void DeleteEntry()

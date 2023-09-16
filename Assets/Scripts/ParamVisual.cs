@@ -52,6 +52,7 @@ public class ParamVisual : MonoBehaviour
                     transform.localScale = previousScale2;
 
                     sprite.color = new Color(red, green, blue, 0.1f);
+                    return;
                 }
             }
 
@@ -60,8 +61,8 @@ public class ParamVisual : MonoBehaviour
                 enableY ? (Visualization.audioBandBuffer[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
                 transform.localScale.z);*/
 
-            /* USE ME
-            transform.localScale = new Vector3(
+            //USE ME
+            /*transform.localScale = new Vector3(
                 enableX ? (Visualization.bandBuffer[band] * scaleXMultiplier) + startXScale : transform.localScale.x,
                 enableY ? (Visualization.bandBuffer[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
                 transform.localScale.z);*/
@@ -80,9 +81,21 @@ public class ParamVisual : MonoBehaviour
         if (!useBuffer)
         {
             transform.localScale = new Vector3(
-            enableX ? (Visualization.bandBuffer[band] * scaleXMultiplier) + startXScale : transform.localScale.x,
-            enableY ? (Visualization.bandBuffer[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
-            transform.localScale.z);
+                enableX ? (Visualization.audioBandBuffer[band] * scaleXMultiplier) + startXScale : transform.localScale.x,
+                enableY ? (Visualization.audioBandBuffer[band] * scaleYMultiplier) + startYScale : transform.localScale.y,
+                transform.localScale.z);
+            /*
+            float max = 0;
+            for (int g = 0; g < 12; ++g)
+            {
+                max = Mathf.Max(Visualization.bandBuffer[g], max);
+            }
+
+            Vector3 previousScale2 = transform.localScale;
+            previousScale2.x = enableX ? Mathf.Lerp(previousScale2.x, (max * scaleXMultiplier) + startXScale, 60f * Time.deltaTime) : transform.localScale.x;
+            previousScale2.y = enableY ? Mathf.Lerp(previousScale2.y, (max * scaleYMultiplier) + startYScale, 60f * Time.deltaTime) : transform.localScale.y;
+            //Add delta time please
+            transform.localScale = previousScale2;*/
 
             if (enableColor) sprite.color = new Color(1f, 0.7f - 0.7f * Visualization.bandBuffer[band], 0f, 0.2f);
             else sprite.color = new Color(red, green, blue, 0.2f);

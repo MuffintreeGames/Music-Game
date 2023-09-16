@@ -372,8 +372,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dba07d64a1d07204aada15f52978cb93, type: 2}
+  m_sharedMaterial: {fileID: -8985923977391598346, guid: dba07d64a1d07204aada15f52978cb93, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -485,7 +485,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -225}
-  m_SizeDelta: {x: 600, y: 75}
+  m_SizeDelta: {x: 750, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &885221322
 MonoBehaviour:
@@ -700,7 +700,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 225, y: 125}
+  m_AnchoredPosition: {x: 225, y: 150}
   m_SizeDelta: {x: 900, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1339529377
@@ -725,22 +725,23 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Music:
 
-    Refresh by Roa
+    1 - Refresh by Roa
 
-    Jaipur by Ashatosh
+    2 - Jaipur by Ashatosh
 
-    Cyberpunk Computer
-    Game | Idra by Alex-Productions
+    3 - Fight
+    by Alex Productions
 
-    Circus Theme (Entry of the Gladiators) -
-    Techno Version by Alexander Nakarada
+
+    Cyberpunk Computer Game | Idra by Alex-Productions
+
 
 
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dba07d64a1d07204aada15f52978cb93, type: 2}
+  m_sharedMaterial: {fileID: -8985923977391598346, guid: dba07d64a1d07204aada15f52978cb93, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -764,8 +765,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 64
-  m_fontSizeBase: 64
+  m_fontSize: 69
+  m_fontSizeBase: 69
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -874,8 +875,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Created in 10 days\nfor \nVimJam 4"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dba07d64a1d07204aada15f52978cb93, type: 2}
+  m_sharedMaterial: {fileID: -8985923977391598346, guid: dba07d64a1d07204aada15f52978cb93, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -899,8 +900,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 64
-  m_fontSizeBase: 64
+  m_fontSize: 69
+  m_fontSizeBase: 69
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -984,7 +985,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 225}
+  m_AnchoredPosition: {x: 0, y: 275}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1912627538
@@ -1009,8 +1010,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Credits
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 71931f4fb9d8f9a4ca3877ecfc0cda96, type: 2}
+  m_sharedMaterial: {fileID: 4950954917630823043, guid: 71931f4fb9d8f9a4ca3877ecfc0cda96, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1119,7 +1120,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -225, y: 125}
+  m_AnchoredPosition: {x: -225, y: 150}
   m_SizeDelta: {x: 900, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2058794992
@@ -1148,8 +1149,8 @@ MonoBehaviour:
 
     Nick Birtch'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dba07d64a1d07204aada15f52978cb93, type: 2}
+  m_sharedMaterial: {fileID: -8985923977391598346, guid: dba07d64a1d07204aada15f52978cb93, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1173,8 +1174,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 64
-  m_fontSizeBase: 64
+  m_fontSize: 69
+  m_fontSizeBase: 69
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

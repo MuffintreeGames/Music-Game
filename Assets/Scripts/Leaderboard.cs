@@ -17,25 +17,25 @@ public class Leaderboard : MonoBehaviour
         [SerializeField] private TextMeshProUGUI[] entryFields;
         [SerializeField] private TextMeshProUGUI playerField;
 
-        public string playerName;
-        public int score = 9999999;
-        public GameObject board;
+        public static int score = 0;
+        public static GameObject board;
         private static int numEntriesHack = 0;
         private LeaderboardReference selectedLeaderboard = LocalLeaderboards.Song1Leaderboard;
 
         private void Start()
         {
+            board = GameObject.Find("ScrollView");
+            playerField.text = "Thanks for Playing!";
             MakeInvisible();
-            //selectedLeaderboard.GetPersonalEntry(LogScore);
             Load();
         }
 
-        public void MakeVisible()
+        public static void MakeVisible()
         {
-          board.SetActive(true);
+            board.SetActive(true);
         }
 
-        public void MakeInvisible()
+        public static void MakeInvisible()
         {
             board.SetActive(false);
         }
@@ -53,13 +53,12 @@ public class Leaderboard : MonoBehaviour
 
         private void OnLeaderboardLoaded(Entry[] entries)
         {
-            Debug.LogError("OnLeaderboardLoaded");
-             foreach (var entryField in entryFields)
+            int i, j;
+            for (j = 0; j < entryFields.Length; j++)
             {
-                entryField.text = "";
+                entryFields[j].text = "";
             }
 
-            int i;
             for (i = 0; i < Mathf.Min(entryFields.Length, entries.Length); i++)
             {
                 entryFields[i].text = $"{entries[i].RankSuffix()}. {entries[i].Username} : {entries[i].Score}";
@@ -82,10 +81,9 @@ public class Leaderboard : MonoBehaviour
     }
 
     public void LogScore(Entry entry)
-        {
-        Debug.LogError("LogScore: " + entry.Score + "<" + score);
-        if (entry.Score == 0 || entry.Score < score) selectedLeaderboard.UploadNewEntry(playerName, score, Callback, ErrorCallback);
-        }
+    {
+        if (entry.Score == 0 || entry.Score < score) selectedLeaderboard.UploadNewEntry(NameHolder.username, PointTracker.points, "", Callback, ErrorCallback);
+    }
 
       public void GetPersonalEntry()
       {
@@ -94,17 +92,15 @@ public class Leaderboard : MonoBehaviour
 
          private void UpdateLeaderboard(Entry entry)
          {
-            Debug.LogError("UpdateLeaderboard");
             if (entry.Rank == 0)
             {
-                if (numEntriesHack < entryFields.Length) entryFields[numEntriesHack].text = $"{RankSuffixLocal(numEntriesHack + 1)}. {playerName} : 0";
-                else playerField.text = $"{RankSuffixLocal(9)}. {playerName} : 0";
+                if (numEntriesHack < entryFields.Length) entryFields[numEntriesHack].text = $"{RankSuffixLocal(numEntriesHack + 1)}. {NameHolder.username} : 0";
+                else playerField.text = $"{RankSuffixLocal(9)}. {NameHolder.username} : 0";
             } else
             {
                 if (entry.Rank > 8) playerField.text = $"{entry.Rank}. {entry.Username} : {entry.Score}";
                 else playerField.text = "Congrats on making top 8!";
-        }
-            MakeVisible();
+         }
          }
 
         private void Callback(bool success)

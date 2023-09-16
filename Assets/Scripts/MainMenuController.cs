@@ -20,27 +20,32 @@ public class MainMenuController : MonoBehaviour
         Debug.Log("currently selected object: " + EventSystem.current.currentSelectedGameObject);
     }
 
-    public void LoadGame()
+    public static void LoadGame()
     {
         SceneManager.LoadScene("Gameplay");
     }
 
-    public void LoadMainMenu()
+    public static void LoadMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void LoadLevelSelect()
+    public static void LoadLevelSelect()
     {
         SceneManager.LoadScene("LevelSelect");
     }
 
-    public void LoadLevelEditor()
+    public static void LoadOnlineLevelSelect()
+    {
+        SceneManager.LoadScene("OnlineLevelSelect");
+    }
+
+    public static void LoadLevelEditor()
     {
         SceneManager.LoadScene("LevelEditor");
     }
 
-    public void LoadCredits()
+    public static void LoadCredits()
     {
 
         SceneManager.LoadScene("Credits");
