@@ -33,6 +33,7 @@ public class ChartManager : MonoBehaviour
     public Slider timeline;
     public TMP_InputField importField;
     public GameObject checkpointLine;
+    public TMP_InputField youtubeFIeld;
 
     public static string selectedMode = "None";
 
@@ -546,5 +547,10 @@ public class ChartManager : MonoBehaviour
             }
         }
         Debug.LogError("failed to find note to move!");
+    }
+
+    public void LoadYoutube()
+    {
+
     }
 }
