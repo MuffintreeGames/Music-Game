@@ -38,7 +38,7 @@ public class Target : MonoBehaviour
             else
             {
                 collidingBar = hit.rigidbody.GetComponentInParent<MusicBar>();
-                Debug.Log("hit something with raycast; position = " + collisionPoint + ", object = " + hit.rigidbody.gameObject + ", current position = " + transform.position);
+                //Debug.Log("hit something with raycast; position = " + collisionPoint + ", object = " + hit.rigidbody.gameObject + ", current position = " + transform.position);
                 barUnderneath = true;
             }
         }/*
