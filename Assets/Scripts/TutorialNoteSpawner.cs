@@ -41,6 +41,8 @@ public class TutorialNoteSpawner : NoteSpawner
         currentTime = 0f;
         tutorialTimer = 0f;
         preludeTimeLeft = preludeTime;
+        HealthTracker.playerDeath.AddListener(base.PauseOnDeath);
+        HealthTracker.songReset.AddListener(ResetToCheckpoint);
     }
 
     // Update is called once per frame
@@ -68,7 +70,8 @@ public class TutorialNoteSpawner : NoteSpawner
             }
         } else {
             float normalNoteTime = currentTime + normalNoteDelay;
-            if (normalNoteTime > introEndTime)
+            float blastNoteTime = currentTime + blastNoteDelay;
+            if (normalNoteTime > introEndTime || (stageOfTutorial == 2 && blastNoteTime > introEndTime))
             {
                 if (currentTime < endOfBeats || normalNoteTime > endOfLoop || (stageOfTutorial == 2 && blastNoteDelay + currentTime > endOfLoop))
                 {
@@ -231,6 +234,33 @@ public class TutorialNoteSpawner : NoteSpawner
                 }
                 break;
         }
+    }
+
+    new void ResetToCheckpoint()
+    {
+        /*if (checkpointReached)
+        {
+            currentTime = checkpointTime - preludeTime;
+            preludeTimeLeft = preludeTime;
+            songSource.time = currentTime;// - preludeTime;
+            //songSource.Play();
+            //chartIndex = 0;
+            RecalculateIndex();
+        }
+        else
+        {
+            currentTime = 0;
+            preludeTimeLeft = preludeTime;
+            songSource.time = currentTime;
+            chartIndex = 0;
+        }
+        deathPause = false;*/
+        currentTime = introEndTime - preludeTime;
+        preludeTimeLeft = preludeTime;
+        songSource.time = currentTime;
+        songSource.Stop();
+        columnIndex = 0;
+        timeLeftUntilNote = 0;
     }
 
     void StageCompleted()

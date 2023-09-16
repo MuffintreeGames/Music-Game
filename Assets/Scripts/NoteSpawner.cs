@@ -139,13 +139,13 @@ public class NoteSpawner : MonoBehaviour
         }
     }
 
-    void PauseOnDeath()
+    protected void PauseOnDeath()
     {
         songSource.Stop();
         deathPause = true;
     }
 
-    void ResetToCheckpoint()
+    protected void ResetToCheckpoint()
     {
         if (checkpointReached)
         {
