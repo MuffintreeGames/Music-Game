@@ -24,6 +24,7 @@ public class Visualization : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        audioSource = MusicController.currentAudioSource;
         GetSpectrumAudioSource();
         MakeFrequencyBands();
         BandBuffer();

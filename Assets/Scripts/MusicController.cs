@@ -5,13 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class MusicController : MonoBehaviour
 {
-    int currentMusicChoice = 0; //set to 0 to play menu music, 1 for level music, or 2 for constellation music
+    public static int currentMusicChoice = 0; 
 
     public AudioSource menuMusic;
-    public AudioSource levelMusic;
-    public AudioSource constellationMusic;
+    public AudioSource song1;
+    public AudioSource song2;
+    public AudioSource song3;
 
-    AudioSource currentAudioSource;
+    public static AudioSource currentAudioSource;
 
     void Start()
     {
@@ -34,24 +35,14 @@ public class MusicController : MonoBehaviour
 
     void UpdateMusic(Scene current, Scene next)
     {
-        int newMusicChoice;
-        if (next.name.Contains("Level"))
-        {
-            Debug.Log("entering level, should play level music");
-            newMusicChoice = 1;
-        } else if (next.name.Contains("Constellation") || next.name.Contains("Badge"))
-        {
-            Debug.Log("entering constellation, should play constellation music");
-            newMusicChoice = 2;
-        } else
-        {
-            Debug.Log("exhausted other options, play menu music");
-            newMusicChoice = 0;
-        }
-
         if (currentAudioSource != null)
         {
-            if (currentMusicChoice == newMusicChoice)
+            if (next.name == "Gameplay" || next.name == "LevelEditor")
+            {
+                currentAudioSource.Stop();
+                return;
+            }
+            if (currentMusicChoice == 0)
             {
                 return;
             } else
@@ -60,11 +51,30 @@ public class MusicController : MonoBehaviour
             }
         }
 
+        currentAudioSource = menuMusic;
+        if (currentAudioSource != null) currentAudioSource.Play();
+    }
+
+    void UpdateMusicManual(int newMusicChoice)
+    {
+        if (currentAudioSource != null)
+        {
+            if (currentMusicChoice == newMusicChoice)
+            {
+                return;
+            }
+            else
+            {
+                currentAudioSource.Stop();
+            }
+        }
+
         switch (newMusicChoice)
         {
             case 0: currentAudioSource = menuMusic; break;
-            case 1: currentAudioSource = levelMusic; break;
-            case 2: currentAudioSource = constellationMusic; break;
+            case 1: currentAudioSource = song1; break;
+            case 2: currentAudioSource = song2; break;
+            case 3: currentAudioSource = song3; break;
         }
         currentMusicChoice = newMusicChoice;
         if (currentAudioSource != null) currentAudioSource.Play();
