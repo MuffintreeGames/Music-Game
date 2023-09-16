@@ -9,6 +9,10 @@ public class NoteSpawner : MonoBehaviour
     public GameObject BlastNote;
     public GameObject YellowNote;
     public GameObject BlueNote;
+    public GameObject TargetTrail;
+    public GameObject BlastNoteTrail;
+    public GameObject YellowNoteTrail;
+    public GameObject BlueNoteTrail;
     public string rawChart;
     public Slider timeline;
     public AudioSource songSource;
@@ -111,13 +115,25 @@ public class NoteSpawner : MonoBehaviour
                 {
                     float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
                     Debug.Log("spawning note at " + currentTime);
-                    switch (nextNote.type)
-                    {
-                        case "Yellow": Instantiate(YellowNote, new Vector2(xPos, spawnY), Quaternion.identity); break;
-                        case "Blue": Instantiate(BlueNote, new Vector2(xPos, spawnY), Quaternion.identity); break;
-                        case "Note": Instantiate(Target, new Vector2(xPos, spawnY), Quaternion.identity); break;
-                    }
-                    notesSpawned++;
+                    
+                        if (checkpointReached)
+                        {
+                        switch (nextNote.type)
+                        {
+                            case "Yellow": Instantiate(YellowNoteTrail, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                            case "Blue": Instantiate(BlueNoteTrail, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                            case "Note": Instantiate(TargetTrail, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                        }
+                        } else
+                        {
+                        switch (nextNote.type)
+                        {
+                            case "Yellow": Instantiate(YellowNote, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                            case "Blue": Instantiate(BlueNote, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                            case "Note": Instantiate(Target, new Vector2(xPos, spawnY), Quaternion.identity); break;
+                        }
+                        }
+                         notesSpawned++;
                 }
             }
         }
@@ -137,8 +153,8 @@ public class NoteSpawner : MonoBehaviour
                 else
                 {
                     float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
-
-                    Instantiate(BlastNote, new Vector2(xPos, spawnY), Quaternion.Euler(0, 0, 45f));
+                    if (checkpointReached) Instantiate(BlastNoteTrail, new Vector2(xPos, spawnY), Quaternion.Euler(0, 0, 45f));
+                    else Instantiate (BlastNote, new Vector2(xPos, spawnY), Quaternion.Euler(0, 0, 45f));
                     notesSpawned++;
                 }
             }
