@@ -61,26 +61,22 @@ public class ChartManager : MonoBehaviour
 
     static float skipDuration = 5f;
 
-    bool devMode = false;
+    bool devMode = true;
     // Start is called before the first frame update
     void Start()
     {
         if (!devMode)
         {
             if (SongHolder.song == null) { Debug.LogError("song not set properly in previous scene!"); return; }
+            songSource.clip = SongHolder.song;
             songLength = SongHolder.correctSongLength + preludeTime;
         } else
         {
             songLength = songSource.clip.length + preludeTime;
         }
-            songSource.clip = SongHolder.song;
             chart = new NoteList();
             chart.checkpointTime = -1f;
-            visibleNotes = new List<GameObject>();
-            
-            Debug.Log("song length = " + songLength);
-            Debug.Log("song name = " + SongHolder.song.ToString());
-        
+            visibleNotes = new List<GameObject>();        
     }
 
     // Update is called once per frame
@@ -307,7 +303,7 @@ public class ChartManager : MonoBehaviour
             float timeDifference = note.time - currentTime;
             float percentageYPosition = ((placementPosition * screenTimeRange) + timeDifference) / screenTimeRange;
             float yPosition = minHeight + (percentageYPosition * (maxHeight-minHeight));// + Mathf.Max(timeDifference, 0) * maxHeight * (1-placementPosition) + Mathf.Min(timeDifference, 0) ;
-            noteObject.transform.localPosition = new Vector2(noteObject.transform.localPosition.x, yPosition);
+            noteObject.transform.localPosition = new Vector3(noteObject.transform.localPosition.x, yPosition, noteObject.transform.localPosition.z);
         }
     }
 
@@ -348,7 +344,7 @@ public class ChartManager : MonoBehaviour
                 newNote.noteObject = noteObject;
                 chart.list.Insert(chartIndex, newNote);
                 noteObject.transform.SetParent(targetCanvas.transform);
-                noteObject.transform.localPosition = new Vector2(noteXPosition, 0);
+                noteObject.transform.localPosition = new Vector3(noteXPosition, 0, noteObject.transform.localPosition.z);
                 visibleNotes.Insert(visibleIndex, noteObject);
                 return;
             }
@@ -380,7 +376,7 @@ public class ChartManager : MonoBehaviour
         float timeDifference = chart.checkpointTime - currentTime;
         float percentageYPosition = ((placementPosition * screenTimeRange) + timeDifference) / screenTimeRange;
         float yPosition = minHeight + (percentageYPosition * (maxHeight - minHeight));// + Mathf.Max(timeDifference, 0) * maxHeight * (1-placementPosition) + Mathf.Min(timeDifference, 0) ;
-        spawnedCheckpointLine.transform.localPosition = new Vector2(spawnedCheckpointLine.transform.localPosition.x, yPosition);
+        spawnedCheckpointLine.transform.localPosition = new Vector3(spawnedCheckpointLine.transform.localPosition.x, yPosition, spawnedCheckpointLine.transform.localPosition.z);
     }
 
     public void ToggleMode(string targetMode)
@@ -438,6 +434,15 @@ public class ChartManager : MonoBehaviour
         UpdateTimeline();
     }
 
+    public void ReturnToStart()
+    {
+        if (songSource.clip == null) { return; }
+        currentTime = 0f;
+        songSource.time = GetPlaceInSong();
+        PerformNoteUpkeep();
+        UpdateTimeline();
+    }
+
     public void ExportNotechart()
     {
         string output = JsonUtility.ToJson(chart);
@@ -480,7 +485,7 @@ public class ChartManager : MonoBehaviour
             chart.list[i].noteObject = noteObject;
             //chart.list.Insert(chartIn, newNote);
             noteObject.transform.SetParent(targetCanvas.transform);
-            noteObject.transform.localPosition = new Vector2(noteXPosition, 0);
+            noteObject.transform.localPosition = new Vector3(noteXPosition, 0, noteObject.transform.localPosition.z);
             //visibleNotes.Insert(visibleIndex, noteObject);
         }
         visibleNotes = new List<GameObject>();
@@ -574,7 +579,7 @@ public class ChartManager : MonoBehaviour
         Debug.LogError("failed to find note to move!");
     }
 
-    public void LoadYoutube()
+    public void UploadToGist()
     {
 
     }

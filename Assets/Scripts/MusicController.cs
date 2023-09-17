@@ -44,6 +44,7 @@ public class MusicController : MonoBehaviour
             case 1: check = song1; break;
             case 2: check = song2; break;
             case 3: check = song3; break;
+            case 4: check = null; break;
         }
         if (check == currentAudioSource) return;
         else {
@@ -80,11 +81,15 @@ public class MusicController : MonoBehaviour
             }
             // if (currentAudioSource != null) currentAudioSource.Play();
         }
-            else if (current.name != "Gameplay" && current.name != "LevelEditor")
+            else if (current.name != "Gameplay" && next.name != "LevelEditor")
         {
             currentMusicChoice = 0;
             currentAudioSource = menuMusic;
             if (currentAudioSource != null) currentAudioSource.Play();
+        } else
+        {
+            currentAudioSource = null;
+            currentMusicChoice = 4;
         }
     }
 
