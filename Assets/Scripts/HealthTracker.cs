@@ -58,7 +58,10 @@ public class HealthTracker : MonoBehaviour
             if (pauseTimeLeft <= 0f)
             {
                 songReset.Invoke();
-                Hexagon.SetActive(false);
+                if (Hexagon != null)
+                {
+                    Hexagon.SetActive(false);
+                }
                 ResetHealth();
             }
         }

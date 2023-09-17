@@ -69,4 +69,14 @@ public class MainMenuController : MonoBehaviour
 
         SceneManager.LoadScene("Credits");
     }
+
+    public static void LoadSongUpload()
+    {
+        SceneManager.LoadScene("SongUploadScene");
+    }
+
+    public static void LoadTutorial()
+    {
+        SceneManager.LoadScene("Tutorial");
+    }
 }

@@ -61,7 +61,7 @@ public class ChartManager : MonoBehaviour
 
     static float skipDuration = 5f;
 
-    bool devMode = true;
+    bool devMode = false;
     // Start is called before the first frame update
     void Start()
     {

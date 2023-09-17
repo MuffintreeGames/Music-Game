@@ -42,6 +42,7 @@ public class TutorialNoteSpawner : NoteSpawner
         preludeTimeLeft = preludeTime;
         HealthTracker.playerDeath.AddListener(base.PauseOnDeath);
         HealthTracker.songReset.AddListener(ResetToCheckpoint);
+        songSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

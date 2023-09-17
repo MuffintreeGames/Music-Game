@@ -58,7 +58,7 @@ public class MusicController : MonoBehaviour
     {
         if (currentAudioSource != null)
         {
-            if (next.name == "Gameplay" || next.name == "LevelEditor")
+            if (next.name == "Gameplay" || next.name == "LevelEditor" || next.name == "UploadSongScene" || next.name == "Tutorial")
             {
                 currentAudioSource.Stop();
             }
@@ -81,7 +81,7 @@ public class MusicController : MonoBehaviour
             }
             // if (currentAudioSource != null) currentAudioSource.Play();
         }
-            else if (current.name != "Gameplay" && next.name != "LevelEditor")
+            else if (current.name != "Gameplay" && next.name != "LevelEditor" && next.name != "Tutorial" && next.name != "UploadSongScene")
         {
             currentMusicChoice = 0;
             currentAudioSource = menuMusic;
