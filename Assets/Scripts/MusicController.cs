@@ -33,7 +33,19 @@ public class MusicController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        AudioSource check = menuMusic;
+        switch (currentMusicChoice)
+        {
+            case 0: check = menuMusic; break;
+            case 1: check = song1; break;
+            case 2: check = song2; break;
+            case 3: check = song3; break;
+        }
+        if (check == currentAudioSource) return;
+        else {
+            currentAudioSource = check;
+            if (currentAudioSource != null) currentAudioSource.Play();
+        }
     }
 
     void UpdateMusic(Scene current, Scene next)
@@ -80,11 +92,9 @@ public class MusicController : MonoBehaviour
             }
             else
             {
+                currentMusicChoice = newMusicChoice;
                 currentAudioSource.Stop();
             }
         }
-
-        currentMusicChoice = newMusicChoice;
-        if (currentAudioSource != null) currentAudioSource.Play();
     }
 }
