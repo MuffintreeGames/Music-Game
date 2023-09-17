@@ -32,7 +32,7 @@ public class ChartManager : MonoBehaviour
     public Slider timeline;
     public TMP_InputField importField;
     public GameObject checkpointLine;
-    public TMP_InputField youtubeFIeld;
+    public TMP_InputField exportField;
 
     public static string selectedMode = "None";
 
@@ -61,22 +61,27 @@ public class ChartManager : MonoBehaviour
 
     static float skipDuration = 5f;
 
-    bool devMode = false;
+    bool devMode = true;
     // Start is called before the first frame update
     void Start()
     {
+
+#if !UNITY_EDITOR
+    devMode = false;
+#endif
         if (!devMode)
         {
             if (SongHolder.song == null) { Debug.LogError("song not set properly in previous scene!"); return; }
             songSource.clip = SongHolder.song;
             songLength = SongHolder.correctSongLength + preludeTime;
-        } else
+        }
+        else
         {
             songLength = songSource.clip.length + preludeTime;
         }
-            chart = new NoteList();
-            chart.checkpointTime = -1f;
-            visibleNotes = new List<GameObject>();        
+        chart = new NoteList();
+        chart.checkpointTime = -1f;
+        visibleNotes = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -446,7 +451,7 @@ public class ChartManager : MonoBehaviour
     public void ExportNotechart()
     {
         string output = JsonUtility.ToJson(chart);
-        GUIUtility.systemCopyBuffer = output;
+        exportField.text = output;
     }
 
     public void ImportNotechart()
