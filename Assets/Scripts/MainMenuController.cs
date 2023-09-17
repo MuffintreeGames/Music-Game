@@ -22,7 +22,25 @@ public class MainMenuController : MonoBehaviour
 
     public static void LoadGame()
     {
+        // load online music generically?
+        SceneManager.LoadScene("Gameplay");
+    }
+
+    public static void LoadSong1()
+    {
+        MusicController.currentMusicChoice = 1;
+        SceneManager.LoadScene("Gameplay");
+    }
+
+    public static void LoadSong2()
+    {
         MusicController.currentMusicChoice = 2;
+        SceneManager.LoadScene("Gameplay");
+    }
+
+    public static void LoadSong3()
+    {
+        MusicController.currentMusicChoice = 3;
         SceneManager.LoadScene("Gameplay");
     }
 

@@ -18,6 +18,7 @@ public class HealthTracker : MonoBehaviour
     public static float publicHealth = 100f;
     public static DeathEvent playerDeath;
     public static ResetEvent songReset;
+    public GameObject Hexagon;
 
     static float internalHealth = 100f;
 
@@ -57,6 +58,7 @@ public class HealthTracker : MonoBehaviour
             if (pauseTimeLeft <= 0f)
             {
                 songReset.Invoke();
+                Hexagon.SetActive(false);
                 ResetHealth();
             }
         }

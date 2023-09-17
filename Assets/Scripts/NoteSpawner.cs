@@ -90,6 +90,7 @@ public class NoteSpawner : MonoBehaviour
             Debug.Log("hit the checkpoint!");
             checkpointReached = true;
             Leaderboard.MakeVisible();
+            Hexagon.SetActive(true);
         }
         if (currentTime >= checkpointTime + 12f)
         {
@@ -101,7 +102,13 @@ public class NoteSpawner : MonoBehaviour
 
     public static void UpdateSongSource()
     {
+        if (songSource != MusicController.currentAudioSource)
+        {
+            Leaderboard.selectLeaderboard(MusicController.currentMusicChoice);
+            Leaderboard.LoadStatic();
+        }
         songSource = MusicController.currentAudioSource;
+
     }
 
     void UpdateTimeline()
@@ -185,6 +192,7 @@ public class NoteSpawner : MonoBehaviour
             songSource.time = currentTime;// - preludeTime;
             //songSource.Play();
             //chartIndex = 0;
+            Hexagon.SetActive(true);
             RecalculateIndex();
         } else
         {

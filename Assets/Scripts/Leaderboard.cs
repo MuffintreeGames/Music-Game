@@ -8,21 +8,28 @@ public static class LocalLeaderboards
 {
     public static LeaderboardReference TestLeaderboard = new LeaderboardReference("fccf102ec5fa94a9adcc223c87738fa4f9fc8ec4692c8b8e0081953655ede9a7");
     public static LeaderboardReference Song1Leaderboard = new LeaderboardReference("639c1328cc5e1f40ea030ede958de4bb1bdafb5cefab0287638f311b95d56e9b");
+    public static LeaderboardReference Song1aLeaderboard = new LeaderboardReference("639c1328cc5e1f40ea030ede958de4bb1bdafb5cefab0287638f311b95d56e9b");
     public static LeaderboardReference Song2Leaderboard = new LeaderboardReference("a166dc3e669f768f5547556ae9fefd694a6dbd40766ecfe447da364bac03e1e0");
-    public static LeaderboardReference Song3Leaderboard = new LeaderboardReference("e759b0ccf3f0124ae78ef9010eaf5065840e53b65be3debb93c0ef772f7d66e2");
-    public static LeaderboardReference Song4Leaderboard = new LeaderboardReference("dd6df64fbd56838ebee113cbc64f095e03c9a4d64a876ae8941181307627f21b");
+    public static LeaderboardReference Song2aLeaderboard = new LeaderboardReference("e759b0ccf3f0124ae78ef9010eaf5065840e53b65be3debb93c0ef772f7d66e2");
+    public static LeaderboardReference Song3Leaderboard = new LeaderboardReference("dd6df64fbd56838ebee113cbc64f095e03c9a4d64a876ae8941181307627f21b");
+    public static LeaderboardReference Song3aLeaderboard = new LeaderboardReference("dd6df64fbd56838ebee113cbc64f095e03c9a4d64a876ae8941181307627f21b");
 }
 public class Leaderboard : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI[] entryFields;
         [SerializeField] private TextMeshProUGUI playerField;
 
+        public static bool needLoad = false;
         public static int score = 0;
         public static GameObject board;
         private static int numEntriesHack = 0;
-        private LeaderboardReference selectedLeaderboard = LocalLeaderboards.Song1Leaderboard;
+        private static LeaderboardReference selectedLeaderboard = LocalLeaderboards.TestLeaderboard;
+        private static LeaderboardReference selectedLeaderboard2 = LocalLeaderboards.TestLeaderboard;
 
-        private void Start()
+        private int i, j = 0;
+        private static int size1, size2 = 0;
+
+    private void Start()
         {
             board = GameObject.Find("ScrollView");
             playerField.text = "Thanks for Playing!";
@@ -30,7 +37,16 @@ public class Leaderboard : MonoBehaviour
             Load();
         }
 
-        public static void MakeVisible()
+    private void Update()
+    {
+        if (needLoad)
+        {
+            Load();
+            needLoad = false;
+        }
+    }
+
+    public static void MakeVisible()
         {
             board.SetActive(true);
         }
@@ -40,33 +56,65 @@ public class Leaderboard : MonoBehaviour
             board.SetActive(false);
         }
 
-        public void selectLeaderboard(int level)
+        public static void selectLeaderboard(int level)
         {
-            if (level == 1 || level > 4) selectedLeaderboard = LocalLeaderboards.Song1Leaderboard;
-            if (level == 2) selectedLeaderboard = LocalLeaderboards.Song2Leaderboard;
-            if (level == 3) selectedLeaderboard = LocalLeaderboards.Song3Leaderboard;
-            Load();
+        if (level == 1 || level > 4)
+        {
+            selectedLeaderboard = LocalLeaderboards.Song1Leaderboard;
+            selectedLeaderboard2 = LocalLeaderboards.Song1aLeaderboard;
+        }
+        if (level == 2) {
+            selectedLeaderboard = LocalLeaderboards.Song2Leaderboard;
+            selectedLeaderboard2 = LocalLeaderboards.Song2aLeaderboard;
+        }
+        if (level == 3) {
+            selectedLeaderboard = LocalLeaderboards.Song3Leaderboard;
+            selectedLeaderboard2 = LocalLeaderboards.Song3aLeaderboard;
+        }
         }
 
-        //needs to be generalized for all leaderboards
-        public void Load() => selectedLeaderboard.GetEntries(OnLeaderboardLoaded);
+    public static void LoadStatic()
+    {
+        needLoad = true;
+    }
 
-        private void OnLeaderboardLoaded(Entry[] entries)
+    //needs to be generalized for all leaderboards
+    public void Load()
+    {
+        for (j = 0; j < entryFields.Length; j++)
         {
-            int i, j;
-            for (j = 0; j < entryFields.Length; j++)
-            {
-                entryFields[j].text = "";
-            }
+            entryFields[j].text = "";
+        }
+        selectedLeaderboard.GetEntries(OnLeaderboardLoaded);
+    }
 
-            for (i = 0; i < Mathf.Min(entryFields.Length, entries.Length); i++)
-            {
+    private void OnLeaderboardLoaded(Entry[] entries)
+        {
+            size1 = entries.Length;
+            while (i < Mathf.Min(entryFields.Length, entries.Length))
+             {
                 entryFields[i].text = $"{entries[i].RankSuffix()}. {entries[i].Username} : {entries[i].Score}";
-            }
+                i++;
+                // parse entries[i].Extra for SongName + ; + Gists Link
+             }
 
-            numEntriesHack = i;
+            //selectedLeaderboard2.GetEntries(OnLeaderboardLoaded2);
+           // numEntriesHack = size1 + size2;
             GetPersonalEntry();
+    }
+
+    private void OnLeaderboardLoaded2(Entry[] entries)
+    {
+        size2 = entries.Length;
+        while (i < Mathf.Min(entryFields.Length, entries.Length + size1))
+        {
+            entries[i].Username = "abcdefghijkl";
+            entries[i].Extra = "MyTitle;12312-71-295-12245_2452";
+            entryFields[i].text = $"{entries[i].Extra.Split(";")[0]} by {entries[i].Username} : {entries[i].Extra.Split(";")[1]}";
+            i++;
         }
+
+    }
 
     public string RankSuffixLocal(int rank)
     {
@@ -82,7 +130,7 @@ public class Leaderboard : MonoBehaviour
 
     public void LogScore(Entry entry)
     {
-        if (entry.Score == 0 || entry.Score < score) selectedLeaderboard.UploadNewEntry(NameHolder.username, PointTracker.points, "", Callback, ErrorCallback);
+        if (entry.Score == 0 || entry.Score < score) selectedLeaderboard.UploadNewEntry(NameHolder.username, PointTracker.points, System.DateTime.Now.ToString(), Callback, ErrorCallback);
     }
 
       public void GetPersonalEntry()

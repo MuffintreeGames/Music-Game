@@ -3077,23 +3077,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28e43cb76fefa7b46a97c90b38aa0e8c, type: 3}
---- !u!1 &1128623920 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5787440663962477967, guid: 28e43cb76fefa7b46a97c90b38aa0e8c, type: 3}
-  m_PrefabInstance: {fileID: 696648357}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1128623926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128623920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 276368ecd5ec85e47be4c16c98b5ffd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1129305604
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3490,7 +3473,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 732922981}
         m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
-        m_MethodName: LoadGame
+        m_MethodName: LoadSong1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
