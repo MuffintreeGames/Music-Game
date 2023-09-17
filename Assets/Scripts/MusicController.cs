@@ -16,6 +16,9 @@ public class MusicController : MonoBehaviour
 
     void Start()
     {
+        if (currentAudioSource != null) return;
+        currentAudioSource = menuMusic;
+        currentAudioSource.Play();
         GameObject[] objs = GameObject.FindGameObjectsWithTag("music");
 
         if (objs.Length > 1)
@@ -30,7 +33,7 @@ public class MusicController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void UpdateMusic(Scene current, Scene next)
@@ -40,9 +43,8 @@ public class MusicController : MonoBehaviour
             if (next.name == "Gameplay" || next.name == "LevelEditor")
             {
                 currentAudioSource.Stop();
-                return;
             }
-            if (currentMusicChoice == 0)
+            else if (currentMusicChoice == 0 && currentAudioSource == menuMusic)
             {
                 return;
             } else
@@ -50,12 +52,25 @@ public class MusicController : MonoBehaviour
                 currentAudioSource.Stop();
             }
         }
-
-        currentAudioSource = menuMusic;
-        if (currentAudioSource != null) currentAudioSource.Play();
+        if (next.name == "Gameplay")
+        {
+            switch (currentMusicChoice)
+            {
+                case 0: currentAudioSource = menuMusic; break;
+                case 1: currentAudioSource = song1; break;
+                case 2: currentAudioSource = song2; break;
+                case 3: currentAudioSource = song3; break;
+            }
+            // if (currentAudioSource != null) currentAudioSource.Play();
+        }
+            else if (current.name != "Gameplay" && current.name != "LevelEditor")
+        {
+            currentAudioSource = menuMusic;
+            if (currentAudioSource != null) currentAudioSource.Play();
+        }
     }
 
-    void UpdateMusicManual(int newMusicChoice)
+    public static void UpdateMusicManual(int newMusicChoice)
     {
         if (currentAudioSource != null)
         {
@@ -69,13 +84,6 @@ public class MusicController : MonoBehaviour
             }
         }
 
-        switch (newMusicChoice)
-        {
-            case 0: currentAudioSource = menuMusic; break;
-            case 1: currentAudioSource = song1; break;
-            case 2: currentAudioSource = song2; break;
-            case 3: currentAudioSource = song3; break;
-        }
         currentMusicChoice = newMusicChoice;
         if (currentAudioSource != null) currentAudioSource.Play();
     }

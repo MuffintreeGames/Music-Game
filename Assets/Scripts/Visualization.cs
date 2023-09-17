@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent (typeof (AudioSource))]
 public class Visualization : MonoBehaviour
 {
-    AudioSource audioSource;
+    public static AudioSource audioSource;
     float[] samples = new float[512];
     public static float[] freqBand = new float[12];
     public static float[] bandBuffer = new float[12];
@@ -18,17 +18,23 @@ public class Visualization : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        audioSource = MusicController.currentAudioSource;
+        UpdateAudioSource();
+        if (audioSource == null) return;
         GetSpectrumAudioSource();
         MakeFrequencyBands();
         BandBuffer();
         CreateAudioBands();
+    }
+
+    public static void UpdateAudioSource()
+    {
+        audioSource = MusicController.currentAudioSource;
     }
 
     void CreateAudioBands()

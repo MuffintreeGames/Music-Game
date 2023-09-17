@@ -15,7 +15,8 @@ public class NoteSpawner : MonoBehaviour
     public GameObject BlueNoteTrail;
     public string rawChart;
     public Slider timeline;
-    public AudioSource songSource;
+    public static AudioSource songSource;
+    public GameObject Hexagon;
 
     protected static float spawnY = 6f;
 
@@ -42,6 +43,7 @@ public class NoteSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Hexagon.SetActive(false);
         chart = JsonUtility.FromJson<NoteList>(rawChart);
         chartIndex = 0;
         Debug.Log("chart loaded: " + chart.list[0].time);
@@ -56,6 +58,7 @@ public class NoteSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateSongSource();
         if (deathPause) return;
 
         if (countdownTimeLeft > 0f) { 
@@ -91,8 +94,14 @@ public class NoteSpawner : MonoBehaviour
         if (currentTime >= checkpointTime + 12f)
         {
             Leaderboard.MakeInvisible();
+            Hexagon.SetActive(true);
         }
 
+    }
+
+    public static void UpdateSongSource()
+    {
+        songSource = MusicController.currentAudioSource;
     }
 
     void UpdateTimeline()

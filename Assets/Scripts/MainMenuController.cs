@@ -22,6 +22,7 @@ public class MainMenuController : MonoBehaviour
 
     public static void LoadGame()
     {
+        MusicController.currentMusicChoice = 2;
         SceneManager.LoadScene("Gameplay");
     }
 
