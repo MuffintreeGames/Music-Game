@@ -46,7 +46,7 @@ public class ChartManager : MonoBehaviour
     GameObject spawnedCheckpointLine = null;
     
     bool shortPause = false;
-    bool longPause = false;
+    public bool longPause = false;
 
     static float preludeTime = 2f;
 

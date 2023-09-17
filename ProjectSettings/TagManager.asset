@@ -42,3 +42,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Chart
+    uniqueID: 3862704451
+    locked: 0
+  - name: Buttons
+    uniqueID: 3914564593
+    locked: 0
+  - name: Overlay
+    uniqueID: 3694349695
+    locked: 0
