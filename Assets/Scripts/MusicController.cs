@@ -43,6 +43,7 @@ public class MusicController : MonoBehaviour
         }
         if (check == currentAudioSource) return;
         else {
+            currentAudioSource.Stop();
             currentAudioSource = check;
             if (currentAudioSource != null) currentAudioSource.Play();
         }
