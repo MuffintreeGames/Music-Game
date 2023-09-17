@@ -48,3 +48,6 @@ TagManager:
   - name: Buttons
     uniqueID: 3914564593
     locked: 0
+  - name: Overlay
+    uniqueID: 3694349695
+    locked: 0
