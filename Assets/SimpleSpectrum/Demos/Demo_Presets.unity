@@ -212,9 +212,37 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
+      propertyPath: MaxColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
+      propertyPath: MaxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
+      propertyPath: MaxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
+      propertyPath: MaxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
+      propertyPath: outputType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 701824360}
+    - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
+      propertyPath: sampleAmount
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
+      propertyPath: useColorGradient
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
 --- !u!1001 &317436520
@@ -443,7 +471,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: cc3ccdd31fd1cdd41bcd284e738d0725, type: 3}
+  m_audioClip: {fileID: 8300000, guid: fb187355d7e687b45a62ff0529e5844c, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -763,9 +791,9 @@ MonoBehaviour:
   barXRotation: 0
   attackDamp: 0.2
   decayDamp: 0.12
-  useColorGradient: 0
-  colorMin: {r: 0.6069961, g: 0.67024964, b: 0.75735295, a: 1}
-  colorMax: {r: 1, g: 0, b: 0, a: 1}
+  useColorGradient: 1
+  colorMin: {r: 1, g: 0.9750385, b: 0, a: 0.19607843}
+  colorMax: {r: 1, g: 0, b: 0, a: 0.5882353}
   colorValueCurve:
     serializedVersion: 2
     m_Curve:
