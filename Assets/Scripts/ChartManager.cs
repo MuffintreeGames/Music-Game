@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,13 +60,27 @@ public class ChartManager : MonoBehaviour
     public static float leftmostColumnPlacement = -4.67f;
 
     static float skipDuration = 5f;
+
+    bool devMode = false;
     // Start is called before the first frame update
     void Start()
     {
-        chart = new NoteList();
-        chart.checkpointTime = -1f;
-        visibleNotes = new List<GameObject>();
-        songLength = songSource.clip.length + preludeTime;
+        if (!devMode)
+        {
+            if (SongHolder.song == null) { Debug.LogError("song not set properly in previous scene!"); return; }
+            songLength = SongHolder.correctSongLength + preludeTime;
+        } else
+        {
+            songLength = songSource.clip.length + preludeTime;
+        }
+            songSource.clip = SongHolder.song;
+            chart = new NoteList();
+            chart.checkpointTime = -1f;
+            visibleNotes = new List<GameObject>();
+            
+            Debug.Log("song length = " + songLength);
+            Debug.Log("song name = " + SongHolder.song.ToString());
+        
     }
 
     // Update is called once per frame
@@ -165,8 +178,17 @@ public class ChartManager : MonoBehaviour
 
     bool IsPaused()
     {
-        return shortPause || longPause;
+        return shortPause || longPause || songSource.clip == null;
     }
+
+    /*public void SongLoaded()
+    {
+        if (songSource.clip == null) { return; }
+        chart = new NoteList();
+        chart.checkpointTime = -1f;
+        visibleNotes = new List<GameObject>();
+        songLength = songSource.clip.length + preludeTime;
+    }*/
 
     public void BriefPlaybackPause()
     {
@@ -386,6 +408,7 @@ public class ChartManager : MonoBehaviour
 
     public void UpdateSongPosition()
     {
+        if (songSource.clip == null) { return; }
         Debug.Log("updating song position!");
         currentTime = Mathf.Clamp(timeline.value * songLength, 0f, songLength);
         //songSource.Stop();
@@ -399,6 +422,7 @@ public class ChartManager : MonoBehaviour
 
     public void SkipForward()
     {
+        if (songSource.clip == null) { return; }
         currentTime = Mathf.Min(currentTime + skipDuration, songLength);
         songSource.time = GetPlaceInSong();
         PerformNoteUpkeep();
@@ -407,6 +431,7 @@ public class ChartManager : MonoBehaviour
 
     public void SkipBackward()
     {
+        if (songSource.clip == null) { return; }
         currentTime = Mathf.Max(currentTime - skipDuration, 0f);
         songSource.time = GetPlaceInSong();
         PerformNoteUpkeep();
