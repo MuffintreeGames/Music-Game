@@ -16,16 +16,20 @@ public class MusicController : MonoBehaviour
 
     void Start()
     {
-        if (currentAudioSource != null) return;
-        currentAudioSource = menuMusic;
-        currentAudioSource.Play();
         GameObject[] objs = GameObject.FindGameObjectsWithTag("music");
 
         if (objs.Length > 1)
         {
             Destroy(this.gameObject);
+            return;
         }
         DontDestroyOnLoad(gameObject);
+
+        if (currentAudioSource == null)
+        {
+            currentAudioSource = menuMusic;
+            currentAudioSource.Play();
+        }
         SceneManager.activeSceneChanged += UpdateMusic;
         UpdateMusic(SceneManager.GetActiveScene(), SceneManager.GetActiveScene());  //call once immediately to set music for current scene
     }
@@ -78,6 +82,7 @@ public class MusicController : MonoBehaviour
         }
             else if (current.name != "Gameplay" && current.name != "LevelEditor")
         {
+            currentMusicChoice = 0;
             currentAudioSource = menuMusic;
             if (currentAudioSource != null) currentAudioSource.Play();
         }

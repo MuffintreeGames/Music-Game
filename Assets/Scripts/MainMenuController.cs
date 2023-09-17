@@ -17,7 +17,7 @@ public class MainMenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("currently selected object: " + EventSystem.current.currentSelectedGameObject);
+        //Debug.Log("currently selected object: " + EventSystem.current.currentSelectedGameObject);
     }
 
     public static void LoadGame()
