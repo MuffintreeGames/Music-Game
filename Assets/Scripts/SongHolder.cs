@@ -17,6 +17,8 @@ public class SongHolder : MonoBehaviour
 
     string storedPath = "";
     float storedSongLength = 0;
+    public string version = "Editor";
+    bool songLoaded = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,89 +46,11 @@ public class SongHolder : MonoBehaviour
             storedPath = path;
             storedSongLength = songLength;
             // Run a coroutine to load an image
-            StartCoroutine(UploadSong4(storedPath, storedSongLength));
+            StartCoroutine(UploadSong(storedPath, storedSongLength));
         });
     }
 
-    /*IEnumerator UploadSong2(string path)
-    {
-        AudioClip uploadedClip = null;
-        using (UnityWebRequest soundWeb = new UnityWebRequest(path, UnityWebRequest.kHttpVerbGET))
-        {
-            // We create a "downloader" for textures and pass it to the request
-            soundWeb.downloadHandler = new DownloadHandlerAudioClip(path, AudioType.MPEG);
-
-            // We send a request, execution will continue after the entire file have been downloaded
-            yield return soundWeb.SendWebRequest();
-
-            // Getting the texture from the "downloader"
-            uploadedClip = ((DownloadHandlerAudioClip)soundWeb.downloadHandler).audioClip;
-            Debug.Log("version 2: at path " + path + ", found song with length " + uploadedClip.length);
-        }
-    }*/
-
-    // Coroutine for image upload
-    IEnumerator UploadSong(string path)
-    {
-        UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.MPEG);
-        yield return www.SendWebRequest();
-
-
-        Debug.Log(www.result);
-        song = DownloadHandlerAudioClip.GetContent(www);
-        if (song == null)
-        {
-            Debug.LogError("returned song was null");
-        }
-        Debug.Log("version 1: at path " + path + ", found song with length " + song.length);
-        //SceneManager.LoadScene("LevelEditor");
-    }
-
-    IEnumerator UploadSong2(string path)
-    {
-        using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.MPEG);
-        DownloadHandlerAudioClip dHA = new DownloadHandlerAudioClip(string.Empty, AudioType.MPEG);
-        dHA.streamAudio = true;
-        www.downloadHandler = dHA;
-        www.SendWebRequest();
-        while (www.downloadProgress < 1)
-        {
-            Debug.Log(www.downloadProgress);
-            yield return new WaitForSeconds(.1f);
-        }
-        if (www.responseCode != 200 || www.result == UnityWebRequest.Result.ConnectionError)
-        {
-            Debug.Log("error");
-        }
-        else
-        {
-            song = DownloadHandlerAudioClip.GetContent(www);
-            Debug.Log("version 2: found song with length " + song.length);
-            //audioSource.Play();
-        }
-
-    }
-
-    IEnumerator UploadSong3(string path)
-    {
-        UnityWebRequest www = UnityWebRequest.Get(path);
-        yield return www.SendWebRequest();
-
-
-        Debug.Log(www.result);
-        //AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
-        
-        Debug.Log("version 3: at path " + path + ", found data containing " + www.downloadHandler.data);
-        //song.SetData(www.downloadHandler.data, 0);
-        /*song = DownloadHandlerAudioClip.GetContent(www);
-        if (song == null)
-        {
-            Debug.LogError("returned song was null");
-        }
-        Debug.Log("version 3: at path " + path + ", found song with length " + song.length);*/
-    }
-
-    IEnumerator UploadSong4(string uri, float songLength)
+    IEnumerator UploadSong(string uri, float songLength)
     {
         //statusText.text = "Loading...";
         UnityWebRequest www = UnityWebRequest.Get(uri);
@@ -152,8 +76,21 @@ public class SongHolder : MonoBehaviour
             Debug.Log("length of samples = " + songLength);
 
             correctSongLength = songLength;
-            SceneManager.LoadScene("LevelEditor");
+            if (version == "Editor")
+            {
+                SceneManager.LoadScene("LevelEditor");
+            } else if (version == "CustomLevel")
+            {
+                songLoaded = true;
+                MusicController.customSongSource.clip = song;
+                MusicController.customSongLength = correctSongLength;
+            }
         }
+    }
+
+    public bool GetSongLoaded()
+    {
+        return songLoaded;
     }
 
 

@@ -450,8 +450,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuMusic: {fileID: 49071474}
   song1: {fileID: 49071471}
+  song1Chart: 
   song2: {fileID: 49071470}
+  song2Chart: 
   song3: {fileID: 49071469}
+  song3Chart: 
 --- !u!114 &49071473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1387,7 +1390,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Online Levels >>
+  m_text: 'Custom Levels >>
 
 '
   m_isRightToLeft: 0

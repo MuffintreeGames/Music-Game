@@ -21,6 +21,7 @@ public class OnlineLevels : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("online levels is on " + gameObject.name);
         Load();
     }
 

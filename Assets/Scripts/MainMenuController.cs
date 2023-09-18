@@ -47,6 +47,12 @@ public class MainMenuController : MonoBehaviour
         SceneManager.LoadScene("Gameplay");
     }
 
+    public static void LoadCustomSong()
+    {
+        MusicController.currentMusicChoice = 5;
+        SceneManager.LoadScene("Gameplay");
+    }
+
     public static void LoadMainMenu()
     {
         SceneManager.LoadScene("MainMenu");

@@ -22,7 +22,7 @@ public class HealthTracker : MonoBehaviour
 
     static float internalHealth = 100f;
 
-    static float damageTakenPerHit = 0f;
+    static float damageTakenPerHit = 15f;
     static float timeToStartHealing = 6f;
     static float rateOfHealing = 18f;   //health regained per second once started healing
 

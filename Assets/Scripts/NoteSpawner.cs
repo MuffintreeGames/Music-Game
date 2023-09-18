@@ -14,7 +14,7 @@ public class NoteSpawner : MonoBehaviour
     public GameObject BlastNoteTrail;
     public GameObject YellowNoteTrail;
     public GameObject BlueNoteTrail;
-    public string rawChart;
+    //public string rawChart;
     public Slider timeline;
     public static AudioSource songSource;
     public GameObject Hexagon;
@@ -22,7 +22,7 @@ public class NoteSpawner : MonoBehaviour
 
     protected static float spawnY = 6f;
 
-    protected NoteList chart;
+    protected static NoteList chart;
     protected float currentTime;
     protected float checkpointTime;
     protected bool checkpointReached = false;
@@ -45,26 +45,43 @@ public class NoteSpawner : MonoBehaviour
 
     protected static float songLength;
     static bool songFinished = false;
+    static bool chartLoaded = false;
+
+    public float WebGLDelay = 0.1f; //stupid hacky solution to webgl desync issues, start song slightly earlier
     // Start is called before the first frame update
     void Start()
     {
         Hexagon.SetActive(false);
-        chart = JsonUtility.FromJson<NoteList>(rawChart);
+        //chart = JsonUtility.FromJson<NoteList>(rawChart);
         chartIndex = 0;
-        Debug.Log("chart loaded: " + chart.list[0].time);
         preludeTimeLeft = preludeTime;
         countdownTimeLeft = countdownTime;
-        checkpointTime = chart.checkpointTime;// + preludeTime;
+        //checkpointTime = chart.checkpointTime;// + preludeTime;
         deathPause = false;
         HealthTracker.playerDeath.AddListener(PauseOnDeath);
         HealthTracker.songReset.AddListener(ResetToCheckpoint);
         songLength = 100f;
+        #if UNITY_EDITOR
+            WebGLDelay = 0f;
+        #endif
+        preludeTimeLeft += WebGLDelay;
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateSongSource();
+        if (!chartLoaded)
+        {
+            UpdateSongChart();
+            if (chartLoaded)
+            {
+                checkpointTime = chart.checkpointTime;
+            }
+            return;
+        }
+        
+
         if (songFinished)
         {
             return;
@@ -86,6 +103,7 @@ public class NoteSpawner : MonoBehaviour
             if (preludeTimeLeft < 0f)
             {
                 songSource.Play();
+                Debug.Log("playing song source!");
             } else
             {
                 songSource.Stop();
@@ -141,7 +159,7 @@ public class NoteSpawner : MonoBehaviour
             Leaderboard.ReloadStatic();
             songFinished = false;
             currentTime = 0;
-            preludeTimeLeft = preludeTime;
+            preludeTimeLeft = preludeTime + WebGLDelay;
             chartIndex = 0;
             checkpointReached = false;
             Hexagon.SetActive(false);
@@ -156,6 +174,21 @@ public class NoteSpawner : MonoBehaviour
         }
         songSource = MusicController.currentAudioSource;
         songLength = songSource.clip.length + preludeTime;
+    }
+
+    public static void UpdateSongChart()
+    {
+        if (!MusicController.updatedChart)
+        {
+            return;
+        }
+        string currentChartString = MusicController.currentSongChart;
+        chart = JsonUtility.FromJson<NoteList>(currentChartString);
+        if (chart == null)
+        {
+            return;
+        }
+        chartLoaded = true;
     }
 
     void UpdateTimeline()
@@ -235,7 +268,7 @@ public class NoteSpawner : MonoBehaviour
         if (checkpointReached)
         {
             currentTime = checkpointTime - preludeTime;
-            preludeTimeLeft = preludeTime;
+            preludeTimeLeft = preludeTime + WebGLDelay;
             songSource.time = currentTime;// - preludeTime;
             //songSource.Play();
             //chartIndex = 0;
@@ -244,7 +277,7 @@ public class NoteSpawner : MonoBehaviour
         } else
         {
             currentTime = 0;
-            preludeTimeLeft = preludeTime;
+            preludeTimeLeft = preludeTime + WebGLDelay;
             songSource.time = currentTime;
             chartIndex = 0;
         }
