@@ -67,6 +67,7 @@ public class NoteSpawner : MonoBehaviour
             WebGLDelay = 0f;
         #endif
         preludeTimeLeft += WebGLDelay;
+        chartLoaded = false;
     }
 
     // Update is called once per frame
