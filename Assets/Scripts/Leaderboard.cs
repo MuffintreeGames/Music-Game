@@ -44,6 +44,7 @@ public class Leaderboard : MonoBehaviour
 
     private void Update()
     {
+        if (MusicController.currentMusicChoice > 3) return;
         if (needLoad)
         {
             FinalLeaderboard();
@@ -61,7 +62,7 @@ public class Leaderboard : MonoBehaviour
 
     public static void MakeVisible()
         {
-            board.SetActive(true);
+            if (MusicController.currentMusicChoice < 4) board.SetActive(true);
         }
 
         public static void MakeInvisible()

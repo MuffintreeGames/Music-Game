@@ -281,7 +281,7 @@ public class NoteSpawner : MonoBehaviour
             //songSource.Play();
             //chartIndex = 0;
             Leaderboard.MakeVisible();
-            Hexagon.SetActive(false);
+            Hexagon.SetActive(true);
             PointTracker.CheckpointResetStatic(checkpointScore);
             RecalculateIndex();
         } else
