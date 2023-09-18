@@ -2,20 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class PositionTracker : MonoBehaviour
 {
     public GameObject blast;
 
+    public GameObject blueSwapParticle;
+    public GameObject yellowSwapParticle;
+
     public float wasdSoundPosition = -5f;   //position of the soundwave controlled with a/d, starts on left
     public float arrowSoundPosition = 5f;   //position of the soundwave controlled with arrows, starts on right
     public bool colorsSwapped = false;
-    public int colorTimer = 0;
+    public float colorTimer = 0.2f;
 
     static float soundMovementSpeed = 12f;
     static float leftBound = -8.5f;
     static float rightBound = 8.5f;
     static float blastAllowance = 0.2f; //range at which the soundwaves will trigger a blast
-    static float blastCooldown = 0.25f; //delay until second blast can happen
+    static float blastCooldown = 0.1f; //delay until second blast can happen
     static float blastImpulse = 8f;
     static float blastDecel = 14f;
     static float blastStopSpeed = 2f;   //when blast velocity reaches this speed, allow control to resume
@@ -55,7 +60,7 @@ public class PositionTracker : MonoBehaviour
         CheckForBlast();
 
 
-        colorTimer--;
+        colorTimer -= Time.deltaTime;
         if (Input.GetButtonDown("ColorSwap"))
         {
             Debug.Log("swapping colors!");
@@ -128,8 +133,24 @@ public class PositionTracker : MonoBehaviour
     {
         if (colorTimer <= 0)
         {
-            colorsSwapped = !colorsSwapped;
-            colorTimer = 45;
+            //colorsSwapped = !colorsSwapped;
+            colorTimer = 0.2f;
+            if (!colorsSwapped) {
+                GameObject newBlue = Instantiate(blueSwapParticle, new Vector2(wasdSoundPosition, -3.8f), Quaternion.identity);
+                newBlue.GetComponent<SwapParticle>().xDirection = 1f;
+                newBlue.GetComponent<SwapParticle>().goalX = arrowSoundPosition;
+                GameObject newYellow = Instantiate(blueSwapParticle, new Vector2(arrowSoundPosition, -3.8f), Quaternion.identity);
+                newYellow.GetComponent<SwapParticle>().xDirection = -1f;
+                newYellow.GetComponent<SwapParticle>().goalX = wasdSoundPosition;
+            } else
+            {
+                GameObject newBlue = Instantiate(blueSwapParticle, new Vector2(arrowSoundPosition, -3.8f), Quaternion.identity);
+                newBlue.GetComponent<SwapParticle>().xDirection = -1f;
+                newBlue.GetComponent<SwapParticle>().goalX = wasdSoundPosition;
+                GameObject newYellow = Instantiate(blueSwapParticle, new Vector2(wasdSoundPosition, -3.8f), Quaternion.identity);
+                newYellow.GetComponent<SwapParticle>().xDirection = 1f;
+                newYellow.GetComponent<SwapParticle>().goalX = arrowSoundPosition;
+            }
         }
     }
 
