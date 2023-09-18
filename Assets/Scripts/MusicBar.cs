@@ -23,7 +23,7 @@ public class MusicBar : MonoBehaviour
     void Start()
     {
         positionTracker = GetComponentInParent<PositionTracker>();
-        transform.localScale = new Vector2(transform.localScale.x, minScale);
+        transform.localScale = new Vector3(transform.localScale.x, minScale, transform.localScale.z);
     }
 
     // Update is called once per frame
@@ -122,7 +122,7 @@ public class MusicBar : MonoBehaviour
         }
 
 
-        transform.localScale = new Vector2(transform.localScale.x, newScale);
+        transform.localScale = new Vector3(transform.localScale.x, newScale, transform.localScale.z);
         GetComponentInChildren<SpriteRenderer>().color = newColor;
     }
 }

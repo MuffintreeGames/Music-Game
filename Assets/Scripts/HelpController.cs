@@ -40,9 +40,13 @@ public class HelpController : MonoBehaviour
         if (page == 0)
         {
             page = 1;
+            helpScreen2.SetActive(true);
+            helpScreen1.SetActive(false);
         } else
         {
             page = 0;
+            helpScreen1.SetActive(true);
+            helpScreen2.SetActive(false);
         }
     }
 }
