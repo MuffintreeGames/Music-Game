@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public class DamageEvent : UnityEvent
+{
+
+}
+
 public class DeathEvent : UnityEvent
 {
 
@@ -16,6 +21,7 @@ public class ResetEvent : UnityEvent
 public class HealthTracker : MonoBehaviour
 {
     public static float publicHealth = 100f;
+    public static DamageEvent playerDamage;
     public static DeathEvent playerDeath;
     public static ResetEvent songReset;
     public GameObject Hexagon;
@@ -39,6 +45,10 @@ public class HealthTracker : MonoBehaviour
     {
         publicHealth = 100f;
         internalHealth = 100f;
+        if (playerDeath == null)
+        {
+            playerDamage = new DamageEvent();
+        }
         if (playerDeath == null)
         {
             playerDeath = new DeathEvent();
@@ -100,6 +110,9 @@ public class HealthTracker : MonoBehaviour
             Debug.Log("deadge");
             playerDeath.Invoke();
             pauseTimeLeft = pauseTime;
+        } else
+        {
+            playerDamage.Invoke();
         }
         timeLeftToHeal = timeToStartHealing;
     }
