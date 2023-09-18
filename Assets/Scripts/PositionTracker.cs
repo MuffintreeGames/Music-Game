@@ -1,8 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
+public class SwapEvent : UnityEvent
+{
 
+}
 
 public class PositionTracker : MonoBehaviour
 {
@@ -15,6 +19,8 @@ public class PositionTracker : MonoBehaviour
     public float arrowSoundPosition = 5f;   //position of the soundwave controlled with arrows, starts on right
     public bool colorsSwapped = false;
     public float colorTimer = 0.2f;
+
+    public static SwapEvent concludeSwap;
 
     static float soundMovementSpeed = 12f;
     static float leftBound = -8.5f;
@@ -40,6 +46,11 @@ public class PositionTracker : MonoBehaviour
         arrowSoundPosition = 5f;
         HealthTracker.playerDeath.AddListener(PauseOnDeath);
         HealthTracker.songReset.AddListener(ResetPositions);
+        if (concludeSwap == null)
+        {
+            concludeSwap = new SwapEvent();
+        }
+        concludeSwap.AddListener(FinalizeSwap);
     }
 
     // Update is called once per frame
@@ -129,6 +140,8 @@ public class PositionTracker : MonoBehaviour
         Instantiate(blast, new Vector2(wasdSoundPosition + (wasdSoundPosition - arrowSoundPosition)/2, blastHeight), Quaternion.identity);
     }
 
+    bool swapInProgress = false;
+
     void SwapColors()
     {
         if (colorTimer <= 0)
@@ -136,21 +149,31 @@ public class PositionTracker : MonoBehaviour
             //colorsSwapped = !colorsSwapped;
             colorTimer = 0.2f;
             if (!colorsSwapped) {
-                GameObject newBlue = Instantiate(blueSwapParticle, new Vector2(wasdSoundPosition, -3.8f), Quaternion.identity);
+                GameObject newBlue = Instantiate(blueSwapParticle, new Vector3(wasdSoundPosition, -3.8f, 0.05f), Quaternion.identity);
                 newBlue.GetComponent<SwapParticle>().xDirection = 1f;
                 newBlue.GetComponent<SwapParticle>().goalX = arrowSoundPosition;
-                GameObject newYellow = Instantiate(blueSwapParticle, new Vector2(arrowSoundPosition, -3.8f), Quaternion.identity);
+                GameObject newYellow = Instantiate(yellowSwapParticle, new Vector3(arrowSoundPosition, -3.8f, 0.05f), Quaternion.identity);
                 newYellow.GetComponent<SwapParticle>().xDirection = -1f;
                 newYellow.GetComponent<SwapParticle>().goalX = wasdSoundPosition;
             } else
             {
-                GameObject newBlue = Instantiate(blueSwapParticle, new Vector2(arrowSoundPosition, -3.8f), Quaternion.identity);
+                GameObject newBlue = Instantiate(blueSwapParticle, new Vector3(arrowSoundPosition - 1f, -3.8f, 0.05f), Quaternion.identity);
                 newBlue.GetComponent<SwapParticle>().xDirection = -1f;
                 newBlue.GetComponent<SwapParticle>().goalX = wasdSoundPosition;
-                GameObject newYellow = Instantiate(blueSwapParticle, new Vector2(wasdSoundPosition, -3.8f), Quaternion.identity);
+                GameObject newYellow = Instantiate(yellowSwapParticle, new Vector3(wasdSoundPosition, -3.8f, 0.05f), Quaternion.identity);
                 newYellow.GetComponent<SwapParticle>().xDirection = 1f;
                 newYellow.GetComponent<SwapParticle>().goalX = arrowSoundPosition;
             }
+            swapInProgress = true;
+        }
+    }
+
+    void FinalizeSwap()
+    {
+        if (swapInProgress)
+        {
+            colorsSwapped = !colorsSwapped;
+            swapInProgress = false;
         }
     }
 

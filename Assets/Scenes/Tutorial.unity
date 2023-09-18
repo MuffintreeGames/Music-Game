@@ -3313,6 +3313,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blast: {fileID: 2064911933760033475, guid: 5ced7196a672ece408a3886ad24adf30, type: 3}
+  blueSwapParticle: {fileID: 3877345536035598188, guid: bfa6078fcf4bd4646b82a59966d3f305, type: 3}
+  yellowSwapParticle: {fileID: 3877345536035598188, guid: 02196d42ffb8f094a86c1d40144c980d, type: 3}
   wasdSoundPosition: -5
   arrowSoundPosition: 5
   colorsSwapped: 0
