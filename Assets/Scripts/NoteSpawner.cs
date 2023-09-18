@@ -52,6 +52,7 @@ public class NoteSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PointTracker.CheckpointResetStatic(0);
         Hexagon.SetActive(false);
         //chart = JsonUtility.FromJson<NoteList>(rawChart);
         chartIndex = 0;
@@ -158,6 +159,7 @@ public class NoteSpawner : MonoBehaviour
         } else
         {
             Leaderboard.ReloadStatic();
+            PointTracker.CheckpointResetStatic(0);
             songFinished = false;
             currentTime = 0;
             preludeTimeLeft = preludeTime + WebGLDelay;
@@ -281,6 +283,7 @@ public class NoteSpawner : MonoBehaviour
         } else
         {
             currentTime = 0;
+            PointTracker.CheckpointResetStatic(0);
             preludeTimeLeft = preludeTime + WebGLDelay;
             songSource.time = currentTime;
             chartIndex = 0;
