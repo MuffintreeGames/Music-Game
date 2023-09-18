@@ -64,7 +64,11 @@ public class MusicController : MonoBehaviour
         {
             currentAudioSource.Stop();
             currentAudioSource = check;
-            if (currentAudioSource != null && currentAudioSource.clip != null) currentAudioSource.Play();
+            if (currentAudioSource != null && currentAudioSource.clip != null)
+            {
+                currentAudioSource.time = 0f;
+                currentAudioSource.Play();
+            }
         }
 
         if (check2 != null && check2 != currentSongChart)

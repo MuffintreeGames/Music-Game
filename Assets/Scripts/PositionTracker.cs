@@ -85,10 +85,17 @@ public class PositionTracker : MonoBehaviour
         {
             float arrowAxis = Input.GetAxis("ArrowMovement");
             arrowSoundPosition += arrowAxis * soundMovementSpeed * Time.deltaTime;
+            if (arrowSoundPosition < wasdSoundPosition)
+            {
+                arrowSoundPosition = wasdSoundPosition - 0.01f;
+            }
 
             float wasdAxis = Input.GetAxis("WASDMovement");
             wasdSoundPosition += wasdAxis * soundMovementSpeed * Time.deltaTime;
-
+            if (wasdSoundPosition > arrowSoundPosition)
+            {
+                wasdSoundPosition = arrowSoundPosition - 0.01f;
+            }
         } else
         {
             arrowSoundPosition += currentBlastVelocity * Time.deltaTime;

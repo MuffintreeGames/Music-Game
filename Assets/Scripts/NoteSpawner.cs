@@ -47,7 +47,7 @@ public class NoteSpawner : MonoBehaviour
 
     protected static float songLength;
     static bool songFinished = false;
-    static bool chartLoaded = false;
+    public static bool chartLoaded = false;
 
     public float WebGLDelay = 0.1f; //stupid hacky solution to webgl desync issues, start song slightly earlier
     // Start is called before the first frame update
@@ -69,6 +69,7 @@ public class NoteSpawner : MonoBehaviour
         #endif
         preludeTimeLeft += WebGLDelay;
         chartLoaded = false;
+        songFinished = false;
     }
 
     // Update is called once per frame
@@ -171,6 +172,7 @@ public class NoteSpawner : MonoBehaviour
             checkpointReached = false;
             checkpointScore = 0;
             Hexagon.SetActive(false);
+            chartLoaded = false;
         }
     }
 
@@ -181,7 +183,14 @@ public class NoteSpawner : MonoBehaviour
             Leaderboard.selectLeaderboard(MusicController.currentMusicChoice);
         }
         songSource = MusicController.currentAudioSource;
-        songLength = songSource.clip.length + preludeTime;
+        if (MusicController.currentMusicChoice == 5)
+        {
+            songLength = MusicController.customSongLength + preludeTime;
+        }
+        else
+        {
+            songLength = songSource.clip.length + preludeTime;
+        }
     }
 
     public static void UpdateSongChart()
