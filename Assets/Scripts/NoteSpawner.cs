@@ -266,8 +266,8 @@ public class NoteSpawner : MonoBehaviour
                 else
                 {
                     float xPos = leftmostColumnPlacement + (nextNote.column * columnWidth);
-                    if (checkpointReached) Instantiate(BlastNoteTrail, new Vector2(xPos, spawnY), Quaternion.Euler(0, 0, 45f));
-                    else Instantiate (BlastNote, new Vector2(xPos, spawnY), Quaternion.Euler(0, 0, 45f));
+                    if (checkpointReached) Instantiate(BlastNoteTrail, new Vector3(xPos, spawnY, .01f), Quaternion.Euler(0, 0, 45f));
+                    else Instantiate (BlastNote, new Vector3(xPos, spawnY, .01f), Quaternion.Euler(0, 0, 45f));
                     notesSpawned++;
                 }
             }
