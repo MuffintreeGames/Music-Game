@@ -19,6 +19,7 @@ public class NoteSpawner : MonoBehaviour
     public static AudioSource songSource;
     public GameObject Hexagon;
     public GameObject endOfSongElements;
+    public GameObject checkpointMessage;
 
     protected static float spawnY = 6f;
 
@@ -34,7 +35,7 @@ public class NoteSpawner : MonoBehaviour
     protected static float countdownTime = 1f;    //use for effects when starting level like a countdown
     protected static float preludeTime = 2f;
 
-    protected static float normalNoteDelay = 1.5f;
+    protected static float normalNoteDelay = 1.8f;
     protected static float blastNoteDelay = 1.9f;
 
     protected float countdownTimeLeft = 0f;
@@ -133,11 +134,13 @@ public class NoteSpawner : MonoBehaviour
             checkpointReached = true;
             checkpointScore = PointTracker.points;
             Leaderboard.MakeVisible();
+            checkpointMessage.SetActive(true);
         }
         if (currentTime >= checkpointTime + 12f)
         {
             Leaderboard.MakeInvisible();
             Hexagon.SetActive(true);
+            checkpointMessage.SetActive(false);
         }
 
     }

@@ -24,6 +24,8 @@ public class FollowPath : MonoBehaviour
 
     bool paused = false;
 
+    TrailRenderer trailRenderer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +37,11 @@ public class FollowPath : MonoBehaviour
             positions[i] = waypoints[i].position;
         }
         HealthTracker.playerDeath.AddListener(OnPlayerDeath);
+        trailRenderer = GetComponent<TrailRenderer>();
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -71,6 +78,10 @@ public class FollowPath : MonoBehaviour
         //transform.position = Vector3.Lerp(startPosition, goalPosition, timeSinceChangedGoal / targetSpeed);
         transform.position = Vector2.SmoothDamp(transform.position, goalPosition, ref velocity, targetSpeed);
         //transform.position = new Vector2(transform.position.x + speed.x * Time.deltaTime, transform.position.y + speed.y * Time.deltaTime);
+        if (OnFinalPath() && trailRenderer != null)
+        {
+            trailRenderer.enabled = true;
+        }
     }
 
     public bool OnFinalPath()

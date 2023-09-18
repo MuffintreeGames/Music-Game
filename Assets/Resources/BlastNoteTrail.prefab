@@ -205,7 +205,7 @@ MonoBehaviour:
   - {fileID: 6603474699730274479}
   waypointSpeeds:
   - 0.8
-  - 1
+  - 1.05
   - 0.8
 --- !u!61 &2156071215294808073
 BoxCollider2D:
