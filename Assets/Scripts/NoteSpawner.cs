@@ -129,7 +129,6 @@ public class NoteSpawner : MonoBehaviour
             Debug.Log("hit the checkpoint!");
             checkpointReached = true;
             Leaderboard.MakeVisible();
-            Hexagon.SetActive(true);
         }
         if (currentTime >= checkpointTime + 12f)
         {
@@ -272,6 +271,7 @@ public class NoteSpawner : MonoBehaviour
             songSource.time = currentTime;// - preludeTime;
             //songSource.Play();
             //chartIndex = 0;
+            Leaderboard.MakeVisible();
             Hexagon.SetActive(true);
             RecalculateIndex();
         } else
