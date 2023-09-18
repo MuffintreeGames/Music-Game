@@ -95,8 +95,6 @@ public class MusicController : MonoBehaviour
 
     public static void UpdateMusicManual(int newMusicChoice)
     {
-        if (currentAudioSource != null)
-        {
             if (currentMusicChoice == newMusicChoice)
             {
                 return;
@@ -104,8 +102,11 @@ public class MusicController : MonoBehaviour
             else
             {
                 currentMusicChoice = newMusicChoice;
+            if (currentAudioSource != null)
+            {
                 currentAudioSource.Stop();
             }
         }
     }
+
 }

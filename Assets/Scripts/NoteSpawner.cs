@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class NoteSpawner : MonoBehaviour
@@ -17,6 +18,7 @@ public class NoteSpawner : MonoBehaviour
     public Slider timeline;
     public static AudioSource songSource;
     public GameObject Hexagon;
+    public GameObject endOfSongElements;
 
     protected static float spawnY = 6f;
 
@@ -40,6 +42,9 @@ public class NoteSpawner : MonoBehaviour
     protected bool deathPause = false;
 
     protected int notesSpawned;
+
+    protected static float songLength;
+    static bool songFinished = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,12 +58,17 @@ public class NoteSpawner : MonoBehaviour
         deathPause = false;
         HealthTracker.playerDeath.AddListener(PauseOnDeath);
         HealthTracker.songReset.AddListener(ResetToCheckpoint);
+        songLength = 100f;
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateSongSource();
+        if (songFinished)
+        {
+            return;
+        }
         if (deathPause) return;
 
         if (countdownTimeLeft > 0f) { 
@@ -76,10 +86,21 @@ public class NoteSpawner : MonoBehaviour
             if (preludeTimeLeft < 0f)
             {
                 songSource.Play();
+            } else
+            {
+                songSource.Stop();
             }
         }
 
         currentTime += Time.deltaTime;
+        if (currentTime > songLength)
+        {
+            Debug.Log("song over!");
+            DoEndOfSongThings();
+        } else
+        {
+            endOfSongElements.SetActive(false);
+        }
         notesSpawned = 0;
         SpawnNewNormalNotes();
         SpawnNewBlastNotes();
@@ -100,6 +121,30 @@ public class NoteSpawner : MonoBehaviour
 
     }
 
+    public void DoEndOfSongThings()
+    {
+        songFinished = true;
+        songSource.Stop();
+        endOfSongElements.SetActive(true);
+    }
+
+    public void LoadNextSong()
+    {
+        MusicController.currentMusicChoice += 1;
+        if (MusicController.currentMusicChoice > 3 )
+        {
+            SceneManager.LoadScene("MainMenu");
+        } else
+        {
+            songFinished = false;
+            currentTime = 0;
+            preludeTimeLeft = preludeTime;
+            chartIndex = 0;
+            checkpointReached = false;
+            Hexagon.SetActive(false);
+        }
+    }
+
     public static void UpdateSongSource()
     {
         if (songSource != MusicController.currentAudioSource)
@@ -108,12 +153,12 @@ public class NoteSpawner : MonoBehaviour
             Leaderboard.LoadStatic();
         }
         songSource = MusicController.currentAudioSource;
-
+        songLength = songSource.clip.length + preludeTime;
     }
 
     void UpdateTimeline()
     {
-        timeline.value = currentTime / songSource.clip.length;
+        timeline.value = currentTime / songLength;
     }
 
     void SpawnNewNormalNotes()

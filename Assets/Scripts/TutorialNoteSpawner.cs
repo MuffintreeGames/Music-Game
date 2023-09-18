@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialNoteSpawner : NoteSpawner
 {
@@ -10,6 +11,7 @@ public class TutorialNoteSpawner : NoteSpawner
     static float timeBetweenNotes = 1f;
     static float endOfBeats = 24.67f;
     static float endOfLoop = 42.5f;
+    static float endOfStage3 = 35f;
     static int[] columnOrder1 = { 3, 6, 1, 8 };
     static int[] columnOrder2 = { 3, 6, 1, 8 };
     static int[] columnOrder3 = { 3, -1, 6, -1 };
@@ -59,6 +61,12 @@ public class TutorialNoteSpawner : NoteSpawner
 
         HandleTutorialMessages();
         currentTime += Time.deltaTime;
+        if (stageOfTutorial == 3 && currentTime > endOfStage3)
+        {
+            Debug.Log("ending tutorial");
+            MusicController.UpdateMusicManual(1);
+            SceneManager.LoadScene("Gameplay");
+        }
         //songSource.time = currentTime;
         if (!triggeredInitialLoop)
         {

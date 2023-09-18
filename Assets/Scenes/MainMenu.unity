@@ -2545,8 +2545,8 @@ MonoBehaviour:
   barXSpacing: 0.25
   barCurveAngle: 0
   barXRotation: 0
-  attackDamp: 0.3
-  decayDamp: 0.02
+  attackDamp: 0.4
+  decayDamp: 0.1
   useColorGradient: 1
   colorMin: {r: 1, g: 1, b: 0, a: 0.078431375}
   colorMax: {r: 1, g: 0, b: 0, a: 0.39215687}
@@ -2648,7 +2648,7 @@ PrefabInstance:
       objectReference: {fileID: 1394287570210470, guid: 449fbf707e8efbb499710e90b6acc107, type: 3}
     - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
       propertyPath: decayDamp
-      value: 0.05
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
       propertyPath: MaxColor.a
@@ -2673,6 +2673,10 @@ PrefabInstance:
     - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
       propertyPath: MinColor.g
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
+      propertyPath: attackDamp
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 114453569203162162, guid: 6632390923a4ac04b9ae12954e1fe7bf, type: 3}
       propertyPath: outputType
@@ -3719,8 +3723,8 @@ MonoBehaviour:
   barXSpacing: 0.25
   barCurveAngle: 0
   barXRotation: 0
-  attackDamp: 0.3
-  decayDamp: 0.02
+  attackDamp: 0.4
+  decayDamp: 0.1
   useColorGradient: 1
   colorMin: {r: 1, g: 1, b: 0, a: 0.078431375}
   colorMax: {r: 1, g: 0, b: 0, a: 0.39215687}
@@ -5729,8 +5733,8 @@ MonoBehaviour:
   barXSpacing: 0
   barCurveAngle: 0
   barXRotation: 0
-  attackDamp: 0.3
-  decayDamp: 0.05
+  attackDamp: 0.4
+  decayDamp: 0.2
   useColorGradient: 1
   colorMin: {r: 1, g: 1, b: 0, a: 0.078431375}
   colorMax: {r: 1, g: 0, b: 0, a: 0.39215687}
