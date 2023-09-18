@@ -9,13 +9,12 @@ using UnityEngine;
 
 public static class LocalLeaderboards
 {
-    public static LeaderboardReference TestLeaderboard = new LeaderboardReference("fccf102ec5fa94a9adcc223c87738fa4f9fc8ec4692c8b8e0081953655ede9a7");
-    public static LeaderboardReference Song1Leaderboard = new LeaderboardReference("639c1328cc5e1f40ea030ede958de4bb1bdafb5cefab0287638f311b95d56e9b");
-    public static LeaderboardReference Song1aLeaderboard = new LeaderboardReference("639c1328cc5e1f40ea030ede958de4bb1bdafb5cefab0287638f311b95d56e9b");
-    public static LeaderboardReference Song2Leaderboard = new LeaderboardReference("a166dc3e669f768f5547556ae9fefd694a6dbd40766ecfe447da364bac03e1e0");
-    public static LeaderboardReference Song2aLeaderboard = new LeaderboardReference("e759b0ccf3f0124ae78ef9010eaf5065840e53b65be3debb93c0ef772f7d66e2");
-    public static LeaderboardReference Song3Leaderboard = new LeaderboardReference("dd6df64fbd56838ebee113cbc64f095e03c9a4d64a876ae8941181307627f21b");
-    public static LeaderboardReference Song3aLeaderboard = new LeaderboardReference("dd6df64fbd56838ebee113cbc64f095e03c9a4d64a876ae8941181307627f21b");
+    public static LeaderboardReference Song1Leaderboard = new LeaderboardReference("94d544ca9c95f64b2d708fdc2338637f8dfd0de98f039525b98f3ae29e1f14ca");
+    public static LeaderboardReference Song1aLeaderboard = new LeaderboardReference("aad90ae6cf5948cff94d7489a241914cf23609cd254998aa87c9ddc9faa25bf0");
+    public static LeaderboardReference Song2Leaderboard = new LeaderboardReference("a97cd46e768468844a689c003115575d7fcec06347fcff16e312eadd0facb9ef");
+    public static LeaderboardReference Song2aLeaderboard = new LeaderboardReference("3f98b3b5c5548374cc9792773fa729fcdf1ba31b97419dcf4e8ef3b6320eaaff");
+    public static LeaderboardReference Song3Leaderboard = new LeaderboardReference("b1f789b7950127d08c044dad397597f70be0d06882df9557963df19a95b47478");
+    public static LeaderboardReference Song3aLeaderboard = new LeaderboardReference("68a65a7635a5c071e2529a5e94d2206462963baade3974fd1fd1fa6989e79818");
 }
 public class Leaderboard : MonoBehaviour
     {
@@ -25,8 +24,8 @@ public class Leaderboard : MonoBehaviour
         public static bool needLoad = false;
         public static bool needReload = false;
         public static GameObject board;
-        private static LeaderboardReference selectedLeaderboard = LocalLeaderboards.TestLeaderboard;
-        private static LeaderboardReference selectedLeaderboard2 = LocalLeaderboards.TestLeaderboard;
+        private static LeaderboardReference selectedLeaderboard = LocalLeaderboards.Song1Leaderboard;
+        private static LeaderboardReference selectedLeaderboard2 = LocalLeaderboards.Song1aLeaderboard;
 
         private Entry myEntry;
         private Entry[] board1;
@@ -166,7 +165,7 @@ public class Leaderboard : MonoBehaviour
             if (myEntry.Rank == 0)
             {
                 if (finalboard.Length < entryFields.Length) entryFields[finalboard.Length].text = $"{RankSuffixLocal(finalboard.Length+1)}. {NameHolder.username} : TBD";
-                else playerField.text = $"{RankSuffixLocal(entryFields.Length+1)}. {NameHolder.username} : TBD";
+                else playerField.text = "Keep it up!";
             } else
             {
                 if (myEntry.Rank > 8) playerField.text = $"{RankSuffixLocal(Array.IndexOf(finalboard, myEntry) +1)}. {myEntry.Username} : {myEntry.Score}";
@@ -208,7 +207,7 @@ public class Leaderboard : MonoBehaviour
                 z++;
             }
 
-            if (PointTracker.points > myEntry.Score) playerField.text = $"New Highscore: { RankSuffixLocal(z + 1)}. { NameHolder.username} : { PointTracker.points}";
+            if (PointTracker.points > myEntry.Score) playerField.text = $"Highscore: { RankSuffixLocal(z + 1)}. { NameHolder.username} : { PointTracker.points}";
             else if (z < 8) playerField.text = $"Placed: { RankSuffixLocal(z + 1)}. { NameHolder.username} : { PointTracker.points}";
             else playerField.text = $"Result: { RankSuffixLocal(z + 1)}. { NameHolder.username} : { PointTracker.points}";
             LogScore();
