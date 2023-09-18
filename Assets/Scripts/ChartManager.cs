@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -494,7 +495,12 @@ public class ChartManager : MonoBehaviour
             //visibleNotes.Insert(visibleIndex, noteObject);
         }
         visibleNotes = new List<GameObject>();
+
+        currentTime = chart.checkpointTime; //done temporarily to place checkpoint line
+        PlaceCheckpointLine();
         currentTime = 0f;
+        UpdateCheckpointLine(); //have to adjust checkpoint position now that currentTime is 0
+
         firstVisibleIndex = 0;
         numNotesVisible = 0;
         longPause = true;
