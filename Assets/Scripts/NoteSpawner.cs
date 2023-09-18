@@ -126,16 +126,19 @@ public class NoteSpawner : MonoBehaviour
         songFinished = true;
         songSource.Stop();
         endOfSongElements.SetActive(true);
+        Leaderboard.LoadStatic();
     }
 
     public void LoadNextSong()
     {
         MusicController.currentMusicChoice += 1;
+        Leaderboard.selectLeaderboard(MusicController.currentMusicChoice);
         if (MusicController.currentMusicChoice > 3 )
         {
             SceneManager.LoadScene("MainMenu");
         } else
         {
+            Leaderboard.ReloadStatic();
             songFinished = false;
             currentTime = 0;
             preludeTimeLeft = preludeTime;
@@ -150,7 +153,6 @@ public class NoteSpawner : MonoBehaviour
         if (songSource != MusicController.currentAudioSource)
         {
             Leaderboard.selectLeaderboard(MusicController.currentMusicChoice);
-            Leaderboard.LoadStatic();
         }
         songSource = MusicController.currentAudioSource;
         songLength = songSource.clip.length + preludeTime;

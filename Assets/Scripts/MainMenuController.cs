@@ -29,18 +29,21 @@ public class MainMenuController : MonoBehaviour
     public static void LoadSong1()
     {
         MusicController.currentMusicChoice = 1;
+        Leaderboard.selectLeaderboard(1);
         SceneManager.LoadScene("Gameplay");
     }
 
     public static void LoadSong2()
     {
         MusicController.currentMusicChoice = 2;
+        Leaderboard.selectLeaderboard(2);
         SceneManager.LoadScene("Gameplay");
     }
 
     public static void LoadSong3()
     {
         MusicController.currentMusicChoice = 3;
+        Leaderboard.selectLeaderboard(3);
         SceneManager.LoadScene("Gameplay");
     }
 

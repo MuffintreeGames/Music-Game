@@ -1,5 +1,8 @@
 using Dan.Main;
 using Dan.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -20,17 +23,20 @@ public class Leaderboard : MonoBehaviour
         [SerializeField] private TextMeshProUGUI playerField;
 
         public static bool needLoad = false;
-        public static int score = 0;
+        public static bool needReload = false;
         public static GameObject board;
-        private static int numEntriesHack = 0;
         private static LeaderboardReference selectedLeaderboard = LocalLeaderboards.TestLeaderboard;
         private static LeaderboardReference selectedLeaderboard2 = LocalLeaderboards.TestLeaderboard;
 
-        private int i, j = 0;
-        private static int size1, size2 = 0;
+        private Entry myEntry;
+        private Entry[] board1;
+        private Entry[] board2;
+        private Entry[] finalboard;
 
     private void Start()
         {
+            needLoad = false;
+            needReload = false;
             board = GameObject.Find("ScrollView");
             playerField.text = "Thanks for Playing!";
             MakeInvisible();
@@ -41,8 +47,16 @@ public class Leaderboard : MonoBehaviour
     {
         if (needLoad)
         {
-            Load();
+            FinalLeaderboard();
+            MakeVisible();
             needLoad = false;
+        }
+        if (needReload)
+        {
+            playerField.text = "Thanks for Playing!";
+            needReload = false;
+            MakeInvisible();
+            Load();
         }
     }
 
@@ -78,10 +92,15 @@ public class Leaderboard : MonoBehaviour
         needLoad = true;
     }
 
+    public static void ReloadStatic()
+    {
+        needReload = true;
+    }
+
     //needs to be generalized for all leaderboards
     public void Load()
     {
-        for (j = 0; j < entryFields.Length; j++)
+        for (int j = 0; j < entryFields.Length; j++)
         {
             entryFields[j].text = "";
         }
@@ -90,29 +109,14 @@ public class Leaderboard : MonoBehaviour
 
     private void OnLeaderboardLoaded(Entry[] entries)
         {
-            size1 = entries.Length;
-            while (i < Mathf.Min(entryFields.Length, entries.Length))
-             {
-                entryFields[i].text = $"{entries[i].RankSuffix()}. {entries[i].Username} : {entries[i].Score}";
-                i++;
-                // parse entries[i].Extra for SongName + ; + Gists Link
-             }
-
-            //selectedLeaderboard2.GetEntries(OnLeaderboardLoaded2);
-           // numEntriesHack = size1 + size2;
-            GetPersonalEntry();
+            board1 = entries;
+            selectedLeaderboard2.GetEntries(OnLeaderboardLoaded2);
     }
 
     private void OnLeaderboardLoaded2(Entry[] entries)
     {
-        size2 = entries.Length;
-        while (i < Mathf.Min(entryFields.Length, entries.Length + size1))
-        {
-            entries[i].Username = "abcdefghijkl";
-            entries[i].Extra = "MyTitle;12312-71-295-12245_2452";
-            entryFields[i].text = $"{entries[i].Extra.Split(";")[0]} by {entries[i].Username} : {entries[i].Extra.Split(";")[1]}";
-            i++;
-        }
+        board2 = entries;
+        BuildLeaderboard();
 
     }
 
@@ -128,28 +132,66 @@ public class Leaderboard : MonoBehaviour
         return $"{rank}{suffix}";
     }
 
-    public void LogScore(Entry entry)
+    public void LogScore()
     {
-        if (entry.Score == 0 || entry.Score < score) selectedLeaderboard.UploadNewEntry(NameHolder.username, PointTracker.points, System.DateTime.Now.ToString(), Callback, ErrorCallback);
+        Debug.Log("LogScore: " + PointTracker.points);
+        if (PointTracker.points < myEntry.Score) { return; }
+        if (board1.Length < 99)
+        {
+            selectedLeaderboard.UploadNewEntry(NameHolder.username, PointTracker.points, System.DateTime.Now.ToString(), Callback, ErrorCallback);
+            myEntry.Score = PointTracker.points;
+        }
+        else if (board2.Length < 99)
+        {
+            selectedLeaderboard2.UploadNewEntry(NameHolder.username, PointTracker.points, System.DateTime.Now.ToString(), Callback, ErrorCallback);
+            myEntry.Score = PointTracker.points;
+        }
     }
 
-      public void GetPersonalEntry()
+      public void BuildLeaderboard()
       {
+        finalboard = board1.Concat(board2).OrderByDescending(item => item.Score).ToArray();
+        int i = 0;
+        while (i < Mathf.Min(entryFields.Length, finalboard.Length))
+        {
+            entryFields[i].text = $"{RankSuffixLocal(i+1)}. {finalboard[i].Username} : {finalboard[i].Score}";
+            i++;
+        }
             selectedLeaderboard.GetPersonalEntry(UpdateLeaderboard);
       }
 
          private void UpdateLeaderboard(Entry entry)
          {
-            if (entry.Rank == 0)
+            myEntry = entry;
+            if (myEntry.Rank == 0)
             {
-                if (numEntriesHack < entryFields.Length) entryFields[numEntriesHack].text = $"{RankSuffixLocal(numEntriesHack + 1)}. {NameHolder.username} : 0";
-                else playerField.text = $"{RankSuffixLocal(9)}. {NameHolder.username} : 0";
+                if (finalboard.Length < entryFields.Length) entryFields[finalboard.Length].text = $"{RankSuffixLocal(finalboard.Length+1)}. {NameHolder.username} : TBD";
+                else playerField.text = $"{RankSuffixLocal(entryFields.Length+1)}. {NameHolder.username} : TBD";
             } else
             {
-                if (entry.Rank > 8) playerField.text = $"{entry.Rank}. {entry.Username} : {entry.Score}";
+                if (myEntry.Rank > 8) playerField.text = $"{RankSuffixLocal(Array.IndexOf(finalboard, myEntry) +1)}. {myEntry.Username} : {myEntry.Score}";
                 else playerField.text = "Congrats on making top 8!";
          }
          }
+
+        private void FinalLeaderboard()
+        {
+        /*for (int j = 0; j < entryFields.Length; j++)
+        {
+            entryFields[j].text = "";
+        }*/
+            Debug.Log("FinalLeaderboard");
+            int i = 0;
+            while (i < finalboard.Length)
+            {
+                //if (finalboard[i].Score > PointTracker.points && i < 8) entryFields[i].text = $"{RankSuffixLocal(i + 1)}. {finalboard[i].Username} : {finalboard[i].Score}";
+                if (finalboard[i].Score < PointTracker.points) break;
+                i++;
+            }
+            playerField.text = $"Result: { RankSuffixLocal(i + 1)}. { NameHolder.username} : { PointTracker.points}";
+            if (PointTracker.points > myEntry.Score) playerField.text = $"New Highscore: { RankSuffixLocal(i + 1)}. { NameHolder.username} : { PointTracker.points}";
+            LogScore();
+        }
 
         private void Callback(bool success)
         {
