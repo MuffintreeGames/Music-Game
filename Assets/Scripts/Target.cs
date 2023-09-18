@@ -57,6 +57,7 @@ public class Target : MonoBehaviour
             {
                 Debug.Log("failed to hit target!");
                 HealthTracker.TakeDamage();
+                PointTracker.pointEvent.Invoke(-50);
                 Destroy(gameObject);
             }
         }
@@ -70,11 +71,13 @@ public class Target : MonoBehaviour
                 {
                     Debug.Log("hit the wrong color!");
                     HealthTracker.TakeDamage();
+                    PointTracker.pointEvent.Invoke(-50);
                     Destroy(gameObject);
                 }
                 else
                 {
                     Debug.Log("hit the correct color!");
+                    PointTracker.pointEvent.Invoke(150);
                     Destroy(gameObject);
                 }
                 return;
@@ -85,17 +88,19 @@ public class Target : MonoBehaviour
                 {
                     Debug.Log("hit the wrong color!");
                     HealthTracker.TakeDamage();
+                    PointTracker.pointEvent.Invoke(-50);
                     Destroy(gameObject);
                 }
                 else
                 {
                     Debug.Log("hit the correct color!");
+                    PointTracker.pointEvent.Invoke(150);
                     Destroy(gameObject);
                 }
                 return;
             }
             Debug.Log("hit a target!");
-            PointTracker.pointEvent.Invoke(points);
+            PointTracker.pointEvent.Invoke(100);
             Destroy(gameObject);
     }
 

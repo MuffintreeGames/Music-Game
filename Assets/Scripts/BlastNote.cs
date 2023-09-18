@@ -23,13 +23,14 @@ public class BlastNote : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Blast"))
         {
             Debug.Log("hit a blast note!");
-            //PointTracker.pointEvent.Invoke(points);
+            PointTracker.pointEvent.Invoke(250);
             Destroy(gameObject);
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("FailBox"))
         {
             Debug.Log("failed to hit blast note!");
             HealthTracker.TakeDamage();
+            PointTracker.pointEvent.Invoke(-125);
             Destroy(gameObject);
         }
     }

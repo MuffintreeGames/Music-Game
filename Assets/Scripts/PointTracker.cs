@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 public class PointEvent : UnityEvent<int>
 {
@@ -13,6 +14,7 @@ public class PointTracker : MonoBehaviour
 
     public static int points = 0;
     public static PointEvent pointEvent;
+    public TextMeshProUGUI scoreBox;
     
     // Start is called before the first frame update
     void Start()
@@ -35,5 +37,6 @@ public class PointTracker : MonoBehaviour
     {
         points += pointsGained;
         Debug.Log("points were gained, score is " + points);
+        scoreBox.text = points.ToString();
     }
 }
