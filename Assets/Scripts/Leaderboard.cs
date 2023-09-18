@@ -170,26 +170,47 @@ public class Leaderboard : MonoBehaviour
             } else
             {
                 if (myEntry.Rank > 8) playerField.text = $"{RankSuffixLocal(Array.IndexOf(finalboard, myEntry) +1)}. {myEntry.Username} : {myEntry.Score}";
-                else playerField.text = "Congrats on making top 8!";
+                else playerField.text = "Keep it up!";
          }
          }
 
         private void FinalLeaderboard()
         {
-        /*for (int j = 0; j < entryFields.Length; j++)
-        {
-            entryFields[j].text = "";
-        }*/
-            Debug.Log("FinalLeaderboard");
-            int i = 0;
-            while (i < finalboard.Length)
+            for (int j = 0; j < entryFields.Length; j++)
             {
-                //if (finalboard[i].Score > PointTracker.points && i < 8) entryFields[i].text = $"{RankSuffixLocal(i + 1)}. {finalboard[i].Username} : {finalboard[i].Score}";
-                if (finalboard[i].Score < PointTracker.points) break;
+                entryFields[j].text = "";
+            }
+            
+            //fills top 8
+            int i = 0;
+            while (i < finalboard.Length && i < 8)
+            {
+                if (finalboard[i].Score > PointTracker.points) entryFields[i].text = $"{RankSuffixLocal(i + 1)}. {finalboard[i].Username} : {finalboard[i].Score}";
+                else if (finalboard[i].Score <= PointTracker.points) 
+                {
+                    entryFields[i].text = $"{ RankSuffixLocal(i + 1)}. { NameHolder.username} : { PointTracker.points}";
+                    i++;
+                    while (i < finalboard.Length+1 && i < 8)
+                    {
+                        entryFields[i].text = $"{RankSuffixLocal(i + 1)}. {finalboard[i - 1].Username} : {finalboard[i - 1].Score}";
+                        i++;
+                    }
+                    break;
+                }
                 i++;
             }
-            playerField.text = $"Result: { RankSuffixLocal(i + 1)}. { NameHolder.username} : { PointTracker.points}";
-            if (PointTracker.points > myEntry.Score) playerField.text = $"New Highscore: { RankSuffixLocal(i + 1)}. { NameHolder.username} : { PointTracker.points}";
+
+            // index in total board
+            int z = 0;
+            while (z < finalboard.Length)
+            {
+                if (finalboard[z].Score <= PointTracker.points) break;
+                z++;
+            }
+
+            if (PointTracker.points > myEntry.Score) playerField.text = $"New Highscore: { RankSuffixLocal(z + 1)}. { NameHolder.username} : { PointTracker.points}";
+            else if (z < 8) playerField.text = $"Placed: { RankSuffixLocal(z + 1)}. { NameHolder.username} : { PointTracker.points}";
+            else playerField.text = $"Result: { RankSuffixLocal(z + 1)}. { NameHolder.username} : { PointTracker.points}";
             LogScore();
         }
 

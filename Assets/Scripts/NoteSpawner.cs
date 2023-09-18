@@ -26,6 +26,7 @@ public class NoteSpawner : MonoBehaviour
     protected float currentTime;
     protected float checkpointTime;
     protected bool checkpointReached = false;
+    protected int checkpointScore = 0;
     protected int chartIndex = 0;
 
     protected static float columnWidth = 1.778f; //change both of these if column width/positioning is changed
@@ -128,6 +129,7 @@ public class NoteSpawner : MonoBehaviour
         {
             Debug.Log("hit the checkpoint!");
             checkpointReached = true;
+            checkpointScore = PointTracker.points;
             Leaderboard.MakeVisible();
         }
         if (currentTime >= checkpointTime + 12f)
@@ -161,6 +163,7 @@ public class NoteSpawner : MonoBehaviour
             preludeTimeLeft = preludeTime + WebGLDelay;
             chartIndex = 0;
             checkpointReached = false;
+            checkpointScore = 0;
             Hexagon.SetActive(false);
         }
     }
@@ -272,7 +275,8 @@ public class NoteSpawner : MonoBehaviour
             //songSource.Play();
             //chartIndex = 0;
             Leaderboard.MakeVisible();
-            Hexagon.SetActive(true);
+            Hexagon.SetActive(false);
+            PointTracker.CheckpointResetStatic(checkpointScore);
             RecalculateIndex();
         } else
         {

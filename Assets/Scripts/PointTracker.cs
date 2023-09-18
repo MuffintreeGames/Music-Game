@@ -30,13 +30,17 @@ public class PointTracker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        scoreBox.text = points.ToString();
+    }
+
+    public static void CheckpointResetStatic(int pointReset)
+    {
+        points = pointReset;
     }
 
     void GainPoints(int pointsGained)
     {
         points += pointsGained;
         Debug.Log("points were gained, score is " + points);
-        scoreBox.text = points.ToString();
     }
 }
